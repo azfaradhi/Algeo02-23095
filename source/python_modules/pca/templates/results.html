@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Similarity Results</title>
+</head>
+<body>
+    <h1>Similarity Results</h1>
+    <p>Processing Time: {{ "%.2f"|format(processing_time) }} seconds</p>
+
+    <h2>Query Image:</h2>
+    <div>
+        <img src="{{ url_for('static', filename='uploads/' + query_image) }}" alt="Query Image" width="300">
+        <p><strong>{{ query_image }}</strong></p>
+    </div>
+
+    <h2>Most Similar Images:</h2>
+    <ul>
+        {% for result in results %}
+        <li>
+            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                <img src="{{ url_for('static', filename='datasets/' + result.filename) }}" 
+                     alt="{{ result.filename }}" width="100" style="margin-right: 15px;">
+                <div>
+                    <p><strong>{{ result.filename }}</strong></p>
+                    <p>Similarity: <strong>{{ "%.2f"|format(result.similarity) }}%</strong></p>
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <a href="{{ url_for('index') }}">Back to Home</a>
+</body>
+</html>
