@@ -4,7 +4,6 @@ import "../styles/global.css"
 import { useEffect, useState } from 'react';
 import { fetchGreeting } from '../services/api';
 import { useRouter } from 'next/navigation';
- 
 import Header from 'src/components/header';
 
 export default function HomePage() {
