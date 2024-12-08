@@ -4,6 +4,8 @@ import { error } from "console";
 import { useEffect, useState } from "react";
 import Header from "src/components/header";
 import "../../styles/global.css"
+import AudioCard from "src/components/audio/audioCard";
+import { fetchMapperData } from '../../services/api';
 
 // Define the type for your result
 type ResultData = {
@@ -11,10 +13,33 @@ type ResultData = {
   score: number;
 };
 
+type AlbumData = {
+  audio: string;
+  image: string;
+  songName: string;
+  artist: string;
+};
+
 export default function AudioPage() {
   const [audioFile, setAudioFile] = useState<File | null>(null);
   const [result, setResult] = useState<ResultData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [albumData, setAlbumData] = useState<AlbumData[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9;
+
+  useEffect(() => {
+    const fetchAlbumData = async () => {
+      try {
+        const data = await fetchMapperData();
+        setAlbumData(data);
+      } catch (error) {
+        console.error('Error fetching album data:', error);
+      }
+    };
+
+    fetchAlbumData();
+  }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -73,6 +98,17 @@ export default function AudioPage() {
     }
   }; 
 
+  const matchAlbum = result
+    ? albumData.find((album) => album.audio === result.namafile)
+    : null;
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = albumData.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Calculate the total number of pages
+  const totalPages = Math.ceil(albumData.length / itemsPerPage);
+
   return (
     <div
       className="h-screen bg-cover bg-fixed bg-center"
@@ -83,7 +119,7 @@ export default function AudioPage() {
       </div>
       
       <div className="flex flex-col items-center">
-        <div className="flex justify-center items-center my-10">
+        <div className="flex flex-col justify-center items-center my-10">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="flex justify-center">
               <input 
@@ -102,14 +138,41 @@ export default function AudioPage() {
               </button>
             </div>
           </form>
-        </div>
+          <h2 className="font-bold text-[32px]">Album List</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {currentItems.map((album, index) => (
+              <AudioCard key={index} album={album} />
+            ))}
+          </div>
+          {/* Pagination Controls */}
+          <div className="flex justify-center mt-4">
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="px-4 py-2 mx-1 bg-gray-300 rounded disabled:opacity-50"
+            >
+              Previous
+            </button>
+            <span className="px-4 py-2 mx-1">{currentPage} / {totalPages}</span>
+            <button
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className="px-4 py-2 mx-1 bg-gray-300 rounded disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
+          </div>
 
         {/* Result Display */}
-        {result && (
+        {result && matchAlbum && (
           <div className="bg-slate-600 bg-opacity-60 border-2 border-black text-white rounded-md p-6 max-w-xs w-full">
             <div className="mb-4">
               <span className="font-semibold">Matched File: </span>
-              <span>{result.namafile}</span>
+              <span>{matchAlbum.songName}</span>
+            </div>
+            <div>
+              <img src={`/midi_dataset/${matchAlbum.image}`} alt={matchAlbum.songName} width="100" />
             </div>
             <div>
               <span className="font-semibold">Similarity Score: </span>

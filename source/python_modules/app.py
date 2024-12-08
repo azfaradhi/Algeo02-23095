@@ -1,9 +1,10 @@
-from fastapi import FastAPI,File,UploadFile
+from fastapi import FastAPI,File,UploadFile, HTTPException
 from fastapi.responses import JSONResponse
 import shutil
 from pydantic import BaseModel
 from music_information.final_audio import compare_file_with_database
 from fastapi.middleware.cors import CORSMiddleware
+import os, json
 
 
 app = FastAPI()
@@ -38,3 +39,16 @@ async def compare_audio(audio: AudioFeatures):
         return JSONResponse(content=result)
     except Exception as e:
         return JSONResponse(content={"message": str(e)}, status_code=500)
+    
+@app.get("/mapper")
+async def get_mapper():
+    try:
+        # Define the path to the mapper.json file
+        current_dir = os.path.dirname(os.getcwdb().decode('utf-8'))  # Decode bytes to string
+        json_path = os.path.join(current_dir, 'dataset', 'mapper.json')
+        # Read the JSON file
+        with open(json_path, 'r') as f:
+            data = json.load(f)
+        return JSONResponse(content=data)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to read mapper.json: {str(e)}")
