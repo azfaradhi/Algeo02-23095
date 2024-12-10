@@ -1,54 +1,76 @@
 import numpy as np
-from scipy.spatial.distance import cosine
-import audio_processing
-import extract_feature
 
-def similarity_calculator(features, database):
-    similarity = []
+def cosine_simiilarity(v1,v2):
+    if np.all(v1 == 0) and np.all(v2 == 0):
+        return 1
+    if np.all(v1 == 0) or np.all(v2 == 0):
+        return 0.0
+    dot = np.dot(v1,v2)
+    norm1 = np.linalg.norm(v1)
+    norm2 = np.linalg.norm(v2)
+
+    if (norm1 == 0) or (norm2 == 0):
+        return 0.0
+    else:
+        res = dot / (norm1 * norm2)
+        if (1-res) < 1e-10:
+            res = 1
+        return res
     
-    for idx, db_features in enumerate(database):
-        for feature in features:
-            atb_similarity = 1 - cosine(feature['ATB'], db_features['ATB'])
-            rtb_similarity = 1 - cosine(feature['RTB'], db_features['RTB'])
-            ftb_similarity = 1 - cosine(feature['FTB'], db_features['FTB'])
-            
-            combined_similarity = (0.5 * atb_similarity + 0.3 * rtb_similarity + 0.2 * ftb_similarity)
+def calculate_similarity(query,target, weights = {'atb':0.5, 'rtb':0.3, 'ftb':0.2}):
+    similarities = {
+        'atb': cosine_simiilarity(query['atb'], target['atb']),
+        'rtb': cosine_simiilarity(query['rtb'], target['rtb']),
+        'ftb': cosine_simiilarity(query['ftb'], target['ftb'])
+    }
 
-            similarity.append({
-                "Database Entry": idx,
-                "ATB Similarity": atb_similarity,
-                "RTB Similarity": rtb_similarity,
-                "FTB Similarity": ftb_similarity,
-                "Combined Similarity": combined_similarity
-            })
+    final = sum(weights[type] * sim for type,sim in similarities.items())
+    return final
+
+def calculate_from_all_feature(features1, features2):
+    similar = []
+    print(f" pertama: {len(features1)}",end="")
+    print(f" kedua: {len(features2)}")
+    for i in range(min(len(features1),len(features2))):
+        similar.append(calculate_similarity(features1[i],features2[i],{'atb':0.5, 'rtb':0.3, 'ftb':0.2}))
+    avg = np.average(similar)
+    return avg
+
+def compare_features_with_database(features, database):
+    res = []
+    for i in range(len(database)):
+        print(f"{i}",end="")
+        sim = calculate_from_all_feature(features,database[i]['features'])
+        res.append(sim)
+    maxidx = np.argmax(res)
+    score = max(res)
+    return {'namafile': database[i]['nama'], 'score':score}
     
-    return similarity
+# na1 = "alb_esp1.mid"
+# window1 = audio_processing.midi_processing(na1)
+# all1 = extract_feature.extract_feature(window1)
 
-def find_max(similarity):
-    if not similarity:
-        return None
-    
-    best = max(similarity, key=lambda x: x["Combined Similarity"])
-    return best
+# na2 = "alb_esp2.mid"
+# window2 = audio_processing.midi_processing(na2)
+# all2 = extract_feature.extract_feature(window2)
+
+# # for i in range(len(all1)):
+# #     print(i,end=" ")
+# #     print(calculate_similarity(all1[i],all2[i],  {'atb':0.5, 'rtb':0.3, 'ftb':0.2}))
 
 
-# features = [
-#     {"ATB": np.array([0.1, 0.2, 0.3, 0.4]), "RTB": np.array([0.1, 0.1, 0.2, 0.3]), "FTB": np.array([0.2, 0.3, 0.4, 0.5])},  # Window 1 dari file acuan
-#     {"ATB": np.array([0.2, 0.3, 0.4, 0.5]), "RTB": np.array([0.2, 0.3, 0.4, 0.5]), "FTB": np.array([0.1, 0.2, 0.3, 0.4])},  # Window 2 dari file acuan
-#     {"ATB": np.array([0.3, 0.4, 0.5, 0.6]), "RTB": np.array([0.3, 0.4, 0.5, 0.6]), "FTB": np.array([0.2, 0.3, 0.4, 0.5])},  # Window 3 dari file acuan
-# ]
+# print(calculate_from_all_feature(all1,all2))
+# list = []
+# folderpath = "./midi_dataset/"
+# for filename in os.listdir(folderpath):
+#     file = os.path.join(folderpath,filename)
+#     temp = audio_processing.midi_processing(file)
+#     temp2 = extract_feature.extract_feature(temp)
+#     list.append({'nama':filename,'features':temp2})
 
-# database = [
+# na1 = "x (26).mid"
+# b = os.path.join(folderpath,na1)
+# window1 = audio_processing.midi_processing(b)
+# all1 = extract_feature.extract_feature(window1)
 
-#     {"ATB": np.array([0.1, 0.2, 0.3, 0.4]), "RTB": np.array([0.1, 0.1, 0.2, 0.3]), "FTB": np.array([0.2, 0.3, 0.4, 0.5])},  # Window 1 dari database
-#     {"ATB": np.array([0.5, 0.6, 0.7, 0.8]), "RTB": np.array([0.5, 0.6, 0.7, 0.8]), "FTB": np.array([0.3, 0.4, 0.5, 0.6])},  # Window 2 dari database
-#     {"ATB": np.array([0.2, 0.3, 0.4, 0.5]), "RTB": np.array([0.2, 0.3, 0.4, 0.5]), "FTB": np.array([0.1, 0.2, 0.3, 0.4])},  # Window 3 dari database
-# ]
-
-# similar = similarity_calculator(features,database)
-
-# for sim in similar:
-#     print(sim)
-
-# print("yang paling deket:\n")
-# print(find_max(similar))
+# a = compare_features_with_database(all1,list)

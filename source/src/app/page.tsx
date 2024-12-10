@@ -1,30 +1,46 @@
 'use client';
 
+import "../styles/global.css"
 import { useEffect, useState } from 'react';
-import { fetchGreeting } from '../services/api';
 import { useRouter } from 'next/navigation';
+import Link from "next/link";
+ 
+import Header from 'src/components/header';
 
 export default function HomePage() {
-  const [greeting, setGreeting] = useState('');
-  const router = useRouter();
-
   useEffect(() => {
-    const getGreeting = async () => {
-      const data = await fetchGreeting();
-      setGreeting(data.Hello);
+    document.body.style.overflow = "hidden";
+    return () => {
+        document.body.style.overflow = "auto";
     };
-    getGreeting();
   }, []);
+
+  const router = useRouter();
 
   const handleRedirect = (path: string) => {
     router.push(path);
   }
 
   return (
-    <div>
-      <p>Greeting: {greeting}</p>
-      <button onClick={() => handleRedirect('/audioPage')}>Go to Audio Page</button>
-      <button onClick={() => handleRedirect('/imagePage')}>Go to Image Page</button>
+    <div
+      className="h-screen bg-cover bg-fixed bg-center bg-[url('/background.png')]"
+      >
+      
+      <div className="h-auto relative z-10 py-10"> 
+        <div className="flex items-center text-[32px] font-bold justify-end">
+          <div className=" relative mx-20 hover:underline transition duration-300">
+            <Link href={"/about-us"} >About Us</Link>
+          </div>
+        </div>
+      </div>
+      <div className="my-[200px] flex justify-center items-center text-center text-[108px] tracking-widest">
+        Foto Kelas
+      </div>
+
+      <div className="flex justify-center text-[32px]">
+        <button onClick={() =>handleRedirect('/image-page')} className="mx-10 bg-black bg-opacity-55 border-2 border-black px-4 py-2 rounded-2xl shadow-xl "> Image Processing</button>
+        <button onClick={() =>handleRedirect('/audio-page')} className="mx-10 bg-black bg-opacity-55 border-2 border-black px-4 py-2 rounded-2xl shadow-xl "> Audio Processing</button>
+      </div>
     </div>
   );
 }
