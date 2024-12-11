@@ -1,11 +1,5 @@
 import React from 'react';
-
-type AlbumData = {
-  audio: string;
-  image: string;
-  songName: string;
-  artist: string;
-};
+import { AlbumData } from './types';
 
 type AudioCardProps = {
   album: AlbumData;
