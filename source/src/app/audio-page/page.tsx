@@ -3,6 +3,7 @@
 import { error } from "console";
 import { useEffect, useState } from "react";
 import Header from "src/components/header";
+import AudioPlayCard from "src/components/audio/audioPlayCard";
 import "../../styles/global.css"
 import AudioCard from "src/components/audio/audioCard";
 import { fetchMapperData } from '../../services/api';
@@ -138,6 +139,23 @@ export default function AudioPage() {
               </button>
             </div>
           </form>
+          {result && matchAlbum && (
+          <div className="bg-slate-600 bg-opacity-60 border-2 border-black text-white rounded-md p-6 max-w-xs w-full">
+            <div className="mb-4">
+              <span className="font-semibold">Matched File: </span>
+              <span>{matchAlbum.songName}</span>
+            </div>
+            <div>
+              <img src={`/test_midi_dataset/${matchAlbum.image}`} alt={matchAlbum.songName} width="100" />
+            </div>
+            <div>
+              <span className="font-semibold">Similarity Score: </span>
+              <span>{(result.score * 100).toFixed(2)}%</span>
+            </div>
+              <AudioPlayCard album={matchAlbum}/>
+          </div>
+           )}
+
           <h2 className="font-bold text-[32px]">Album List</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {currentItems.map((album, index) => (
@@ -163,23 +181,6 @@ export default function AudioPage() {
             </button>
           </div>
           </div>
-
-        {/* Result Display */}
-        {result && matchAlbum && (
-          <div className="bg-slate-600 bg-opacity-60 border-2 border-black text-white rounded-md p-6 max-w-xs w-full">
-            <div className="mb-4">
-              <span className="font-semibold">Matched File: </span>
-              <span>{matchAlbum.songName}</span>
-            </div>
-            <div>
-              <img src={`/midi_dataset/${matchAlbum.image}`} alt={matchAlbum.songName} width="100" />
-            </div>
-            <div>
-              <span className="font-semibold">Similarity Score: </span>
-              <span>{(result.score * 100).toFixed(2)}%</span>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

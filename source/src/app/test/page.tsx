@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import MIDIPlayer from 'midi-player-js';
 import Soundfont from 'soundfont-player';
+import '../../styles/global.css';
 
 const albumData = {
   audio: 'ACDC - Thunderstruck.mid',
@@ -17,7 +18,6 @@ const instruments = [
   'violin',
   'trumpet',
   'flute',
-  // Add more instruments as needed
 ];
 
 const App = () => {
@@ -38,7 +38,6 @@ const App = () => {
 
     playerRef.current = player;
 
-    // Load the MIDI file
     fetch(`/dataset/test_midi_dataset/${albumData.audio}`)
       .then((response) => {
         if (!response.ok) {

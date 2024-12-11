@@ -1,5 +1,3 @@
-import MIDIPlayer from 'midi-player-js';
-
 export type AlbumData = {
     audio: string;
     image: string;
@@ -7,12 +5,10 @@ export type AlbumData = {
     artist: string;
 };
 
-export type MIDIEvent = {
-    name: string;
-    [key: string]: any;
-};
-
-export interface ExtendedPlayer extends MIDIPlayer.Player {
-  getSongLength: () => number;
-  getSongTime: () => number;
-}
+export const instruments = [
+    'acoustic_grand_piano',
+    'electric_guitar_jazz',
+    'violin',
+    'trumpet',
+    'flute',
+  ];
