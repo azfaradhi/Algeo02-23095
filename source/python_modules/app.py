@@ -8,7 +8,7 @@ import os, json, zipfile, rarfile
 
 
 app = FastAPI()
-UPLOAD_DIR = UPLOAD_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'public/dataset')
+UPLOAD_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'public/dataset')
 
 app.add_middleware(
     CORSMiddleware,

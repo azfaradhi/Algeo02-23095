@@ -4,7 +4,7 @@
 
 @font-face {
     font-family: 'cormorant';
-    src: url('/Cormorant/static/Cormorant-Regular.ttf') format('truetype');
+    src: url('/font/Cormorant/static/Cormorant-Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
