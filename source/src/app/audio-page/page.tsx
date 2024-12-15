@@ -17,7 +17,7 @@ type AlbumData = {
 export default function AudioPage() {
   const [albumData, setAlbumData] = useState<AlbumData[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 4;
+  const itemsPerPage = 5;
 
   useEffect(() => {
     const fetchAlbumData = async () => {

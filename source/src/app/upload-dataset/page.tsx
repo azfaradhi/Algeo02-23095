@@ -36,8 +36,8 @@ export default function UploadPage() {
         </div>
       <div className="flex flex-col w-full justify-between gap-5 text-center items-center">
         <h1 className="font-bold text-[50px] justify-center">Uploader</h1>
-        <div className="flex flex-col border-2 border-black rounded-xl">
-          Upload Image
+        <div className="flex flex-col border-2 border-black rounded-xl p-5">
+        <h2 className="text-3xl pb-5">Upload Image</h2>
           <input
             type="file"
             accept=".zip,.rar,.7z,.tar,.gz"
@@ -49,8 +49,8 @@ export default function UploadPage() {
             }}
           />
         </div>
-        <div className="flex flex-col border-2 border-black rounded-xl">
-          Upload Audio
+        <div className="flex flex-col border-2 border-black rounded-xl p-5">
+        <h2 className="text-3xl pb-5">Upload Audio</h2>
           <input
             type="file"
             accept=".mid, .zip,.rar,.7z,.tar,.gz"
@@ -62,8 +62,8 @@ export default function UploadPage() {
             }}
           />
         </div>
-        <div className="flex flex-col border-2 border-black rounded-xl">
-          Upload Mapper
+        <div className="flex flex-col border-2 border-black rounded-xl p-5">
+        <h2 className="text-3xl pb-5">Upload Mapper</h2>
           <input
             type="file"
             accept=".json"
