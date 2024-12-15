@@ -30,18 +30,30 @@ app.add_middleware(
     allow_methods=["*"],  # Allows all HTTP methods (GET, POST, etc.)
     allow_headers=["*"],  # Allows all headers
 )
+
+
+
+
 @app.post("/upload_file/")
 async def upload_file(file: UploadFile = File(...)):
     try:
-        # Save the uploaded file
-        file_location = f"./{file.filename}"
+        # Ensure the 'uploads' folder exists
+        file_location = f"./uploads/{file.filename}"
+        os.makedirs(os.path.dirname(file_location), exist_ok=True)
+
+        # Open the file in binary mode and save
         with open(file_location, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
-
+        
+        # Log the size and confirm the file is saved correctly
+        file_size = os.path.getsize(file_location)
+        print(f"File {file.filename} uploaded with size {file_size} bytes.")
+        
         return JSONResponse(content={"message": "File uploaded successfully", "filename": file.filename})
     
     except Exception as e:
         return JSONResponse(content={"message": str(e)}, status_code=500)
+
 
 class AudioFeatures(BaseModel):
     features: str
