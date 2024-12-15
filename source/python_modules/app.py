@@ -57,10 +57,8 @@ async def compare_audio(audio: AudioFeatures):
 @app.get("/mapper")
 async def get_mapper():
     try:
-        # Define the path to the mapper.json file
-        current_dir = os.path.dirname(os.getcwdb().decode('utf-8'))  # Decode bytes to string
-        json_path = os.path.join(current_dir, 'dataset', 'mapper.json')
-        # Read the JSON file
+        json_path = os.path.join(UPLOAD_DIR, 'mapper.json')
+
         with open(json_path, 'r') as f:
             data = json.load(f)
         return JSONResponse(content=data)
@@ -73,6 +71,8 @@ async def upload_image(file: UploadFile = File(...)):
 
 @app.post("/upload_audio")
 async def upload_audio(file: UploadFile = File(...)):
+    if file.filename.endswith('.mid'):
+        return await save_file(file, "midi_dataset")
     return await save_zipfile(file, "midi_dataset")
 
 @app.post("/upload_mapper")

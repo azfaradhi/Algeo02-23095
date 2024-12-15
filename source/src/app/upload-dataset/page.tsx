@@ -53,7 +53,7 @@ export default function UploadPage() {
           Upload Audio
           <input
             type="file"
-            accept=".zip,.rar,.7z,.tar,.gz"
+            accept=".mid, .zip,.rar,.7z,.tar,.gz"
             onChange={(e) => {
               if (e.target.files && e.target.files.length > 0) {
                 setAudioFile(e.target.files[0]);
