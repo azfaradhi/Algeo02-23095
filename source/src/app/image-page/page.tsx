@@ -1,6 +1,7 @@
 'use client';
 import { useState } from "react";
 import Header from "src/components/header";
+import ImageComparisonResults from "./ImageComparisonResults";
 import "../../styles/global.css"
 
 // Define the type for your result
@@ -9,9 +10,15 @@ type ResultData = {
   score: number;
 };
 
+type ImageComparisonResponse = {
+  results: ResultData[];
+  execution_time?: number;
+};
+
 export default function ImagePage() {
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [results, setResults] = useState<ResultData[] | null>(null); // Changed to array to hold multiple results
+  const [results, setResults] = useState<ResultData[] | null>(null);
+  const [executionTime, setExecutionTime] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,6 +30,7 @@ export default function ImagePage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setExecutionTime(null);
 
     if (!imageFile) {
       alert("Please select a file.");
@@ -61,15 +69,21 @@ export default function ImagePage() {
         throw new Error(`HTTP error! status: ${response2.status}, message: ${errorData}`);
       }
     
-      const data2 = await response2.json();
+      const data2: ImageComparisonResponse = await response2.json();
       console.log("Response data:", data2);
       
       // Filter out the query image and any results with score 0
       const filteredResults = data2.results
         .filter((result: ResultData) => result.namafile !== nameFile && result.score > 0)
-        .sort((a: ResultData, b: ResultData) => b.score - a.score); // Sorting results by similarity score (highest to lowest)
-        
+        .sort((a: ResultData, b: ResultData) => b.score - a.score)
+        .slice(0, 10); // Always limit to top 10
+      
       setResults(filteredResults);
+
+      // Set execution time if available
+      if (data2.execution_time) {
+        setExecutionTime(data2.execution_time);
+      }
     } catch (error) {
       console.error("Detailed error:", error);
     } finally {
@@ -79,7 +93,7 @@ export default function ImagePage() {
 
   return (
     <div
-      className="h-screen bg-cover bg-fixed bg-center"
+      className="min-h-screen bg-cover bg-fixed bg-center"
       style={{ backgroundImage: "url('background.png')" }}
     >
       <div className="py-10">
@@ -108,30 +122,16 @@ export default function ImagePage() {
           </form>
         </div>
 
+        {/* Execution Time Display */}
+        {executionTime !== null && (
+          <div className="text-white text-center mb-4 bg-slate-600 bg-opacity-60 p-4 rounded-md">
+            Execution Time: {executionTime} seconds
+          </div>
+        )}
+
         {/* Result Display */}
         {results && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 my-10">
-            {results.map((result) => (
-              <div
-                key={result.namafile}
-                className="bg-slate-600 bg-opacity-60 border-2 border-black text-white rounded-md p-6 max-w-xs w-full"
-              >
-                <div className="mb-4">
-                  <img
-                    src={`http://localhost:8000/image_dataset/${result.namafile}`}
-                    alt={result.namafile}
-                    className="w-full h-auto mb-4"
-                  />
-                  <span className="font-semibold">Matched File: </span>
-                  <span>{result.namafile}</span>
-                </div>
-                <div>
-                  <span className="font-semibold">Similarity Score: </span>
-                  <span>{(result.score * 100).toFixed(2)}%</span>
-                </div>
-              </div>
-            ))}
-          </div>
+          <ImageComparisonResults results={results} />
         )}
       </div>
     </div>

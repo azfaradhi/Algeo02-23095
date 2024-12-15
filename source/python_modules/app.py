@@ -145,6 +145,7 @@ async def compare_image(request: CompareImageRequest):
     """
     Membandingkan gambar yang diunggah dengan dataset yang ada.
     """
+    start_time = time.time()
     uploaded_image_name = request.features
     dataset_folder = os.path.join(os.getcwd(), "image_dataset")
     dataset_path = os.path.join(dataset_folder, uploaded_image_name)
@@ -165,7 +166,14 @@ async def compare_image(request: CompareImageRequest):
         results = compare_image_with_dataset(uploaded_image_name)
         logging.info(f"Hasil perbandingan: {results}")
 
-        return {"message": "Perbandingan selesai.", "results": results}
+        # Hitung waktu eksekusi
+        execution_time = time.time() - start_time
+
+        return {
+            "message": "Perbandingan selesai.", 
+            "results": results,
+            "execution_time": round(execution_time, 4)  # Rounded to 4 decimal places
+        }
     
     except Exception as e:
         # Log error secara rinci

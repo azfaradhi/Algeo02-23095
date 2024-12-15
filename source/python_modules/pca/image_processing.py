@@ -22,7 +22,7 @@ def rgb_to_grayscale(image):
     # Convert back to PIL Image
     return Image.fromarray(grayscale_array)
 
-def resize_image(grayscale_img, target_size=(224, 224)):
+def resize_image(grayscale_img, target_size=(64, 64)):
     return grayscale_img.resize(target_size, Image.LANCZOS)
 
 def image_to_1d_vector(resized_grayscale_img):
@@ -30,7 +30,7 @@ def image_to_1d_vector(resized_grayscale_img):
     image_array = np.array(resized_grayscale_img)
     return image_array.flatten()
 
-def process_images(input_dir, target_size=(224, 224)):
+def process_images(input_dir, target_size=(64, 64)):
     image_extensions = ['.jpg', '.jpeg', '.png', '.bmp', '.gif', '.tiff']
     
     # Check if input directory exists
@@ -75,7 +75,7 @@ def process_images(input_dir, target_size=(224, 224)):
     
     return image_vectors
 
-def process_single_image(image_path, target_size=(224, 224)):
+def process_single_image(image_path, target_size=(64, 64)):
     with Image.open(image_path) as img:
         # Convert to grayscale
         grayscale_img = rgb_to_grayscale(img)

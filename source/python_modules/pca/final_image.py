@@ -35,7 +35,7 @@ def compare_image_with_dataset(uploadedImageName):
     for filename in dataset_files:
         file_path = os.path.join(dataset_folder, filename)
         try:
-            vector = process_single_image(file_path, target_size=(224, 224))
+            vector = process_single_image(file_path, target_size=(64, 64))
             dataset_vectors.append(vector)
         except Exception as e:
             logging.error(f"Error processing {filename}: {e}")
@@ -46,7 +46,7 @@ def compare_image_with_dataset(uploadedImageName):
     # Step 2: Process the uploaded image
     uploadedImagePath = os.path.join(dataset_folder, uploadedImageName)
     try:
-        query_vector = process_single_image(uploadedImagePath, target_size=(224, 224))
+        query_vector = process_single_image(uploadedImagePath, target_size=(64, 64))
     except Exception as e:
         logging.error(f"Error processing uploaded image {uploadedImageName}: {e}")
         raise HTTPException(status_code=500, detail="Error processing uploaded image")
