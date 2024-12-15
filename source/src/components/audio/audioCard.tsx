@@ -11,10 +11,8 @@ const AudioCard: React.FC<AudioCardProps> = ({ album }) => {
       <img src={`/dataset/test_image/${album.image}`} alt={album.songName} width="100" className="mr-4 rounded-lg" />
       <div>
         <p className="font-bold text-[32px]">{album.songName}</p>
-        <p className="">{album.artist}</p>
-        
+        <p className="text-left">{album.artist}</p>
       </div>
-      {/* <script src='http://www.midijs.net/lib/midi.js'></script> */}
     </div>
   );
 };

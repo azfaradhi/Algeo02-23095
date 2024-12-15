@@ -11,4 +11,9 @@ export const instruments = [
     'violin',
     'trumpet',
     'flute',
-  ];
+];
+
+export type ResultData = {
+    namafile: string;
+    score: number;
+};
