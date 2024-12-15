@@ -22,6 +22,10 @@ def absolute_tone_based(window):
     histogram = np.zeros(128)
 
     for note in window:
+
+        if np.isnan(note) or np.isinf(note):
+            
+            continue
         note_idx = int(round(note))
         if (0 <= note_idx < 128):
             histogram[note_idx] += 1
@@ -41,6 +45,10 @@ def relative_tone_based(window):
         intervals = np.diff(window)
 
         for interval in intervals:
+
+            if np.isnan(interval) or np.isinf(interval):
+                continue
+
             interval_idx = int(round(interval)) + 127
             if 0 <= interval_idx < 255:
                 histogram[interval_idx] += 1
@@ -60,6 +68,8 @@ def first_tone_based(window):
         first = window[0]
         intervals = window - first
         for interval in intervals:
+            if np.isnan(interval) or np.isinf(interval):
+                continue
             interval_idx = int(round(interval)) + 127
             if 0 <= interval_idx < 255:
                 histogram[interval_idx] += 1
