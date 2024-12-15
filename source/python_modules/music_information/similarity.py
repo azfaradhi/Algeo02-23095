@@ -2,7 +2,6 @@ import numpy as np
 # import audio_processing
 # import extract_feature
 # import os
-# import time
 # import mido
 
 def cosine_simiilarity(v1,v2):
@@ -92,8 +91,8 @@ def compare_features_with_database(features, database):
 # window2 = audio_processing.midi_processing(na2)  
 # feature2 = extract_feature.extract_feature(window2)
 
-# # a = calculate_from_all_feature(feature,feature2)
-# # print(a)
+# a = calculate_from_all_feature(feature,feature2)
+# print(a)
 
 # list = []
 # database = "../wav_dataset"
