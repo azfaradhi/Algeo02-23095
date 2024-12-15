@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+    font-family: 'cormorant';
+    src: url('/font/Cormorant/static/Cormorant-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+@layer base {
+    body {
+        @apply font-cormorant;
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+}
+
+@layer utilities {
+    .font-cormorant {
+        font-family: 'Cormorant', serif;
+    }
+}

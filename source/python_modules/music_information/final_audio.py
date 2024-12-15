@@ -5,7 +5,7 @@ import os
 
 def compare_file_with_database(uploadedName):
     list = []
-    database = "./midi_dataset"
+    database = "../../public/dataset/midi_dataset"
     for filename in os.listdir(database):
         file = os.path.join(database,filename)
         temp = audio.midi_processing(file)

@@ -8,3 +8,8 @@ export const fetchGreeting = async () => {
   const response = await api.get('/');
   return response.data;
 };
+
+export const fetchMapperData = async () => {
+  const response = await api.get('/mapper');
+  return response.data;
+};
