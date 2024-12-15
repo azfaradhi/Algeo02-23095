@@ -1,4 +1,9 @@
 import numpy as np
+# import audio_processing
+# import extract_feature
+# import os
+# import time
+# import mido
 
 def cosine_simiilarity(v1,v2):
     if np.all(v1 == 0) and np.all(v2 == 0):
@@ -29,17 +34,25 @@ def calculate_similarity(query,target, weights = {'atb':0.5, 'rtb':0.3, 'ftb':0.
 
 def calculate_from_all_feature(features1, features2):
     similar = []
-    print(f" pertama: {len(features1)}",end="")
-    print(f" kedua: {len(features2)}")
+
+    length_ratio = min(len(features1),len(features2)) / max(len(features1),len(features2))
+
+    if length_ratio < 0.05:
+        return 0
+    
     for i in range(min(len(features1),len(features2))):
         similar.append(calculate_similarity(features1[i],features2[i],{'atb':0.5, 'rtb':0.3, 'ftb':0.2}))
+    if (len(similar) == 0):
+        return 0
+    
     avg = np.average(similar)
+    # weighted_avg = avg * length_ratio
+
     return avg
 
 def compare_features_with_database(features, database):
     res = []
     for i in range(len(database)):
-        print(f"{i}",end="")
         sim = calculate_from_all_feature(features,database[i]['features'])
         res.append((database[i]['nama'], sim))
     res.sort(key=lambda x: x[1], reverse=True)
@@ -70,9 +83,37 @@ def compare_features_with_database(features, database):
 #     temp2 = extract_feature.extract_feature(temp)
 #     list.append({'nama':filename,'features':temp2})
 
-# na1 = "x (26).mid"
-# b = os.path.join(folderpath,na1)
-# window1 = audio_processing.midi_processing(b)
-# all1 = extract_feature.extract_feature(window1)
+# na1 = "coldplaycover.wav"
+# starttime = time.time()
+# na2 = "Faded_Love.mid"
+# window1 = audio_processing.wav_processing(na1)
+# feature = extract_feature.extract_feature(window1)
+# print(feature)
+# window2 = audio_processing.midi_processing(na2)  
+# feature2 = extract_feature.extract_feature(window2)
 
-# a = compare_features_with_database(all1,list)
+# # a = calculate_from_all_feature(feature,feature2)
+# # print(a)
+
+# list = []
+# database = "../wav_dataset"
+
+# for root, dirs, files in os.walk(database):
+#     for filename in files:
+#         # Check if file has .mid or .midi extension
+#         if not filename.lower().endswith(('.wav', '.mp3', '.mid', '.midi')):
+#             continue
+#         file_path = os.path.join(root, filename)  # Get the full file path
+#         if os.path.isfile(file_path):  # Check if it is a valid file
+#             try:
+#                 temp = audio_processing.wav_processing(file_path)  # Process the file
+#                 temp2 = extract_feature.extract_feature(temp)  # Extract features
+#                 list.append({'nama': filename, 'features': temp2})
+#             except Exception as e:
+#                 print(f"Error processing {root} {filename}: {str(e)}")
+#                 continue
+
+# a = compare_features_with_database(feature, list)
+# endtime = time.time()
+# print(a)
+# print(endtime-starttime)
