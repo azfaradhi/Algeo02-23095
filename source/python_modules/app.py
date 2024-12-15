@@ -8,6 +8,7 @@ from fastapi.responses import JSONResponse
 import shutil
 from pydantic import BaseModel
 from music_information.final_audio import compare_file_with_database
+from music_information.final_audio import clear_cache
 from fastapi.middleware.cors import CORSMiddleware
 import os, json, zipfile, rarfile
 from fastapi.staticfiles import StaticFiles
@@ -84,8 +85,8 @@ async def upload_image(file: UploadFile = File(...)):
 @app.post("/upload_audio")
 async def upload_audio(file: UploadFile = File(...)):
     if file.filename.endswith('.mid'):
-        return await save_file(file, "midi_dataset")
-    return await save_zipfile(file, "midi_dataset")
+        return await save_file(file, "test_midi_dataset")
+    return await save_zipfile(file, "test_midi_dataset")
 
 @app.post("/upload_mapper")
 async def upload_mapper(file: UploadFile = File(...)):
@@ -126,6 +127,7 @@ async def save_zipfile(file: UploadFile, subdir: str):
             raise HTTPException(status_code=400, detail="Unsupported file type")
 
         os.remove(temp_file_location)
+        clear_cache()
         return JSONResponse(content={"message": "File uploaded successfully", "filename": file.filename})
     except Exception as e:
         return JSONResponse(content={"message": str(e)}, status_code=500)
