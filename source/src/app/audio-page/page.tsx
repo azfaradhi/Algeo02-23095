@@ -51,7 +51,6 @@ export default function AudioPage() {
       <div className="flex w-full">
         {/* handle submit and show match album */}
         <div className="w-2/5 text-center">
-        <h2 className="font-bold text-[32px]">Insert Audio</h2>
           <AudioSubmit/>
         </div>
 

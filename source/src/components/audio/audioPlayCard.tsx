@@ -83,30 +83,19 @@ const AudioPlayCard: React.FC<AudioPlayCardProps> = ({album, score}) => {
   // };
 
   return (
-    <div className="flex flex-col justify-center items-center">
-      <img src={`/dataset/test_image/${album.image}`} alt={album.image} className="mb-4" />
-      <h1 className="text-2xl font-bold mb-2">{album.songName}</h1>
-      <h2 className="text-xl mb-4">{album.artist}</h2>
-      <h2 className="text-xl mb-4">Similarity score: {(score * 100).toFixed(2)}%</h2>
-      <div className="mb-4">
-        {/* <label htmlFor="instruments" className="mr-2">Select Instruments:</label>
-        <select
-          id="instruments"
-          multiple
-          value={selectedInstruments}
-          onChange={handleInstrumentChange}
-          className="px-2 py-1 border rounded bg-black text-white"
-        >
-          {instruments.map((inst) => (
-            <option key={inst} value={inst}>{inst}</option>
-          ))}
-        </select> */}
-      </div>
-      <div className="flex space-x-4">
+    <div className="flex gap-4 justify-start text-left items-center border bg-white bg-opacity-15 border-white rounded-xl">
+      <img src={`/dataset/test_image/${album.image}`} alt={album.image} className="w-32 h-32" />
+      <div className='flex flex-col'>
+        <h1 className="text-2xl font-bold">{album.songName}</h1>
+        <h2 className="text-xl">{album.artist}</h2>
+        <h2 className="text-xl mb-4">Similarity score: {(score * 100).toFixed(2)}%</h2>
+        <div className="flex space-x-4">
         <button onClick={handlePlay} className="px-4 py-2 text-white rounded">Play</button>
         <button onClick={handlePause} className="px-4 py-2  text-white rounded">Pause</button>
         <button onClick={handleStop} className="px-4 py-2  text-white rounded">Stop</button>
       </div>
+    </div>
+
     </div>
   );
 };

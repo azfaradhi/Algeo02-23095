@@ -41,10 +41,12 @@ def compare_features_with_database(features, database):
     for i in range(len(database)):
         print(f"{i}",end="")
         sim = calculate_from_all_feature(features,database[i]['features'])
-        res.append(sim)
-    maxidx = np.argmax(res)
-    score = max(res)
-    return {'namafile': database[maxidx]['nama'], 'score':score}
+        res.append((database[i]['nama'], sim))
+    res.sort(key=lambda x: x[1], reverse=True)
+
+    top_5 = res[:5]
+    print([{'namafile': item[0], 'score': item[1]} for item in top_5])
+    return [{'namafile': item[0], 'score': item[1]} for item in top_5]
     
 # na1 = "alb_esp1.mid"
 # window1 = audio_processing.midi_processing(na1)

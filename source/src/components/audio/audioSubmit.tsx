@@ -8,7 +8,7 @@ import { fetchMapperData } from 'src/services/api';
 
 const AudioSubmit = () => {
     const [audioFile, setAudioFile] = useState<File | null>(null);
-    const [result, setResult] = useState<ResultData | null>(null);
+    const [result, setResult] = useState<ResultData[]> ([]);
     const [isLoading, setIsLoading] = useState(false);
     const [albumData, setAlbumData] = useState<AlbumData[]>([]);
 
@@ -72,7 +72,7 @@ const AudioSubmit = () => {
             throw new Error(`HTTP error! status: ${response2.status}, message: ${errorData}`);
           }
         
-          const data2 = await response2.json();
+          const data2: ResultData[] = await response2.json();
           console.log("Response data:", data2);
           setResult(data2);
         } catch (error) {
@@ -82,31 +82,44 @@ const AudioSubmit = () => {
         }
       }; 
 
-    const matchAlbum = result
-        ? albumData.find((album) => album.audio === result.namafile)
-        : null;
+    // const matchAlbum = result
+    //     ? albumData.find((album) => album.audio === result[0]?.namafile)
+    //     : null;
 
     return (
-        <div className="flex flex-col items-center">
-        <div className="flex flex-col justify-center items-center my-10">
-            {result && matchAlbum && (
-                <div className="bg-slate-600 bg-opacity-60 border-2 border-black text-white rounded-md p-6 max-w-xs w-full">
-                    <AudioPlayCard album={matchAlbum} score={result.score}/>
+        <div className="flex flex-col items-center w-full px-5">
+        <div className="flex flex-col w-full gap-5 justify-center items-center border border-white rounded-xl">
+            {result.length > 0 && (
+                <div className='w-full px-5'>
+                  <ul>
+                    {result.map((item, index) => {
+                        const matchAlbum = albumData.find((album) => album.audio === item.namafile);
+                        return (
+                            <li key={index}>
+                                {matchAlbum && (
+                                    <div className="mt-4">
+                                        <AudioPlayCard album={matchAlbum} score={item.score} />
+                                    </div>
+                                )}
+                            </li>
+                        );
+                    })}
+                  </ul>
                 </div>
             )}
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="">
                 <div className="flex justify-center">
                     <input 
                     type="file" 
                     onChange={handleFileChange} 
-                    className="border border-gray-300 rounded-md p-6 w-full max-w-xs"
+                    className="border border-gray-300 rounded-md p-6 mt-5 w-full max-w-xs"
                     />
                 </div>
                 <div className="flex justify-center">
                     <button 
                         type="submit" 
                         disabled={isLoading}
-                        className="bg-slate-600 bg-opacity-60 border-2 my-10 border-black text-white font-semibold py-2 px-4 rounded-md w-full max-w-xs hover:bg-transparent hover:border-2 transition duration-200 disabled:opacity-50"
+                        className="bg-slate-600 bg-opacity-60 border-2 my-5 border-black text-white font-semibold py-2 px-4 rounded-md w-full max-w-xs hover:bg-transparent hover:border-2 transition duration-200 disabled:opacity-50"
                     >
                     {isLoading ? 'Processing...' : 'Upload File'}
                     </button>
