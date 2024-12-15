@@ -1,0 +1,302 @@
+[
+  {
+    "audio": "Queen - We Are The Champions.mid",
+    "image": "Queen - We Are The Champions.jpg",
+    "songName": "We Are The Champions",
+    "artist": "Queen"
+  },
+  {
+    "audio": "Imagine dragons - Radioactive.mid",
+    "image": "Imagine dragons - Radioactive.jpg",
+    "songName": "Radioactive",
+    "artist": "Imagine dragons"
+  },
+  {
+    "audio": "Grover Washington - Just The Two Of Us.mid",
+    "image": "Grover Washington - Just The Two Of Us.jpg",
+    "songName": "Just The Two Of Us",
+    "artist": "Grover Washington"
+  },
+  {
+    "audio": "Backstreet Boys - I Want It That Way.mid",
+    "image": "Backstreet Boys - I Want It That Way.jpg",
+    "songName": "I Want It That Way",
+    "artist": "Backstreet Boys"
+  },
+  {
+    "audio": "Red Hot Chili Peppers - Californication.mid",
+    "image": "Red Hot Chili Peppers - Californication.jpg",
+    "songName": "Californication",
+    "artist": "Red Hot Chili Peppers"
+  },
+  {
+    "audio": "John Lennon - Imagine.mid",
+    "image": "John Lennon - Imagine.jpg",
+    "songName": "Imagine",
+    "artist": "John Lennon"
+  },
+  {
+    "audio": "Studio Ghibli - Ghibli Medley.mid",
+    "image": "Studio Ghibli - Ghibli Medley.jpeg",
+    "songName": "Ghibli Medley",
+    "artist": "Studio Ghibli"
+  },
+  {
+    "audio": "Slipknot - Duality.mid",
+    "image": "Slipknot - Duality.jpg",
+    "songName": "Duality",
+    "artist": "Slipknot"
+  },
+  {
+    "audio": "Guns n Roses - Sweet Child O Mine.mid",
+    "image": "Guns n Roses - Sweet Child O Mine.jpeg",
+    "songName": "Sweet Child O Mine",
+    "artist": "Guns n Roses"
+  },
+  {
+    "audio": "Radiohead - Creep.mid",
+    "image": "Radiohead - Creep.png",
+    "songName": "Creep",
+    "artist": "Radiohead"
+  },
+  {
+    "audio": "Coldplay - The Scientist.mid",
+    "image": "Coldplay - The Scientist.png",
+    "songName": "The Scientist",
+    "artist": "Coldplay"
+  },
+  {
+    "audio": "Coldplay - Viva La Vida.mid",
+    "image": "Coldplay - Viva La Vida.png",
+    "songName": "Viva La Vida",
+    "artist": "Coldplay"
+  },
+  {
+    "audio": "Doraemon - Doraemon no Uta.mid",
+    "image": "Doraemon - Doraemon no Uta.jpg",
+    "songName": "Doraemon no Uta",
+    "artist": "Doraemon"
+  },
+  {
+    "audio": "Howl - Merry Go Round of Life.mid",
+    "image": "Howl - Merry Go Round of Life.jpg",
+    "songName": "Merry Go Round of Life",
+    "artist": "Howl"
+  },
+  {
+    "audio": "Metallica - Nothing Else Matters.mid",
+    "image": "Metallica - Nothing Else Matters.jpg",
+    "songName": "Nothing Else Matters",
+    "artist": "Metallica"
+  },
+  {
+    "audio": "Elvis Presley - Can't help falling in love with you.mid",
+    "image": "Elvis Presley - Can't help falling in love with you.jpg",
+    "songName": "Can't help falling in love with you",
+    "artist": "Elvis Presley"
+  },
+  {
+    "audio": "Death Note - L's Theme.mid",
+    "image": "Death Note - L's Theme.jpeg",
+    "songName": "L's Theme",
+    "artist": "Death Note"
+  },
+  {
+    "audio": "Spirited Away - Inochi no Namae.mid",
+    "image": "Spirited Away - Inochi no Namae.jpg",
+    "songName": "Inochi no Namae",
+    "artist": "Spirited Away"
+  },
+  {
+    "audio": "Guns n Roses - Knockin On Heaven's Door.mid",
+    "image": "Guns n Roses - Knockin On Heaven's Door.jpeg",
+    "songName": "Knockin On Heaven's Door",
+    "artist": "Guns n Roses"
+  },
+  {
+    "audio": "Michael Jackson - Smooth Criminal.mid",
+    "image": "Michael Jackson - Smooth Criminal.jpg",
+    "songName": "Smooth Criminal",
+    "artist": "Michael Jackson"
+  },
+  {
+    "audio": "imagine dragons - demons.mid",
+    "image": "imagine dragons - demons.jpg",
+    "songName": "demons",
+    "artist": "imagine dragons"
+  },
+  {
+    "audio": "gorillaz - feel good inc.mid",
+    "image": "gorillaz - feel good inc.jpeg",
+    "songName": "feel good inc",
+    "artist": "gorillaz"
+  },
+  {
+    "audio": "Michael Jackson - Billie Jean.mid",
+    "image": "Michael Jackson - Billie Jean.jpg",
+    "songName": "Billie Jean",
+    "artist": "Michael Jackson"
+  },
+  {
+    "audio": "Metallica - Master Of Puppets.mid",
+    "image": "Metallica - Master Of Puppets.jpg",
+    "songName": "Master Of Puppets",
+    "artist": "Metallica"
+  },
+  {
+    "audio": "Beyonce - Crazy in Love.mid",
+    "image": "Beyonce - Crazy in Love.jpg",
+    "songName": "Crazy in Love",
+    "artist": "Beyonce"
+  },
+  {
+    "audio": "Michael Jackson - Rock with You.mid",
+    "image": "Michael Jackson - Rock with You.jpeg",
+    "songName": "Rock with You",
+    "artist": "Michael Jackson"
+  },
+  {
+    "audio": "Backstreet Boys - Everybody.mid",
+    "image": "Backstreet Boys - Everybody.jpg",
+    "songName": "Everybody",
+    "artist": "Backstreet Boys"
+  },
+  {
+    "audio": "Fools Garden - Lemon Tree.mid",
+    "image": "Fools Garden - Lemon Tree.jpg",
+    "songName": "Lemon Tree",
+    "artist": "Fools Garden"
+  },
+  {
+    "audio": "passenger - let her go.mid",
+    "image": "passenger - let her go.jpeg",
+    "songName": "let her go",
+    "artist": "passenger"
+  },
+  {
+    "audio": "Evangelion - Cruel Angel's Thesis.mid",
+    "image": "Evangelion - Cruel Angel's Thesis.jpeg",
+    "songName": "Cruel Angel's Thesis",
+    "artist": "Evangelion"
+  },
+  {
+    "audio": "Guns n Roses - November Rain.mid",
+    "image": "Guns n Roses - November Rain.jpeg",
+    "songName": "November Rain",
+    "artist": "Guns n Roses"
+  },
+  {
+    "audio": "Owl City - Fireflies.mid",
+    "image": "Owl City - Fireflies.jpg",
+    "songName": "Fireflies",
+    "artist": "Owl City"
+  },
+  {
+    "audio": "ACDC - Thunderstruck.mid",
+    "image": "ACDC - Thunderstruck.jpeg",
+    "songName": "Thunderstruck",
+    "artist": "ACDC"
+  },
+  {
+    "audio": "Bon Jovi - Living on a Prayer.mid",
+    "image": "Bon Jovi - Living on a Prayer.jpg",
+    "songName": "Living on a Prayer",
+    "artist": "Bon Jovi"
+  },
+  {
+    "audio": "Eminem - My Name Is.mid",
+    "image": "Eminem - My Name Is.jpg",
+    "songName": "My Name Is",
+    "artist": "Eminem"
+  },
+  {
+    "audio": "gorillaz - clint eastwood.mid",
+    "image": "gorillaz - clint eastwood.jpg",
+    "songName": "clint eastwood",
+    "artist": "gorillaz"
+  },
+  {
+    "audio": "Guns n Roses - Paradise City.mid",
+    "image": "Guns n Roses - Paradise City.jpg",
+    "songName": "Paradise City",
+    "artist": "Guns n Roses"
+  },
+  {
+    "audio": "Red Hot Chili Peppers - Otherside.mid",
+    "image": "Red Hot Chili Peppers - Otherside.jpeg",
+    "songName": "Otherside",
+    "artist": "Red Hot Chili Peppers"
+  },
+  {
+    "audio": "Queen - Bohemian Rapsody.mid",
+    "image": "Queen - Bohemian Rapsody.jpeg",
+    "songName": "Bohemian Rapsody",
+    "artist": "Queen"
+  },
+  {
+    "audio": "Nirvana - Smells Like Teen Spirit.mid",
+    "image": "Nirvana - Smells Like Teen Spirit.jpg",
+    "songName": "Smells Like Teen Spirit",
+    "artist": "Nirvana"
+  },
+  {
+    "audio": "Rick Astley - Never Gonna Give You Up.mid",
+    "image": "Rick Astley - Never Gonna Give You Up.jpg",
+    "songName": "Never Gonna Give You Up",
+    "artist": "Rick Astley"
+  },
+  {
+    "audio": "Michael Jackson - Beat It.mid",
+    "image": "Michael Jackson - Beat It.jpg",
+    "songName": "Beat It",
+    "artist": "Michael Jackson"
+  },
+  {
+    "audio": "adele - skyfall.mid",
+    "image": "adele - skyfall.jpeg",
+    "songName": "skyfall",
+    "artist": "adele"
+  },
+  {
+    "audio": "Louis Armstrong - What A Wonderful World.mid",
+    "image": "Louis Armstrong - What A Wonderful World.jpeg",
+    "songName": "What A Wonderful World",
+    "artist": "Louis Armstrong"
+  },
+  {
+    "audio": "Gravity Falls - Made Me Realize.mid",
+    "image": "Gravity Falls - Made Me Realize.jpg",
+    "songName": "Made Me Realize",
+    "artist": "Gravity Falls"
+  },
+  {
+    "audio": "Cowboy Bepop - Space Lion.mid",
+    "image": "Cowboy Bepop - Space Lion.jpeg",
+    "songName": "Space Lion",
+    "artist": "Cowboy Bepop"
+  },
+  {
+    "audio": "Linkin Park - One Step Closer.mid",
+    "image": "Linkin Park - One Step Closer.jpeg",
+    "songName": "One Step Closer",
+    "artist": "Linkin Park"
+  },
+  {
+    "audio": "Michael Jackson - Thriller.mid",
+    "image": "Michael Jackson - Thriller.png",
+    "songName": "Thriller",
+    "artist": "Michael Jackson"
+  },
+  {
+    "audio": "Backstreet Boys - As Long As You Love Me.mid",
+    "image": "Backstreet Boys - As Long As You Love Me.png",
+    "songName": "As Long As You Love Me",
+    "artist": "Backstreet Boys"
+  },
+  {
+    "audio": "Frank Sinatra - My Way.mid",
+    "image": "Frank Sinatra - My Way.jpg",
+    "songName": "My Way",
+    "artist": "Frank Sinatra"
+  }
+]
