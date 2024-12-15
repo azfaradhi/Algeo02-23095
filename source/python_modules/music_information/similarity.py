@@ -44,7 +44,7 @@ def compare_features_with_database(features, database):
         res.append(sim)
     maxidx = np.argmax(res)
     score = max(res)
-    return {'namafile': database[i]['nama'], 'score':score}
+    return {'namafile': database[maxidx]['nama'], 'score':score}
     
 # na1 = "alb_esp1.mid"
 # window1 = audio_processing.midi_processing(na1)
