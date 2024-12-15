@@ -4,8 +4,7 @@ import "../styles/global.css"
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from "next/link";
- 
-import Header from 'src/components/header';
+
 
 export default function HomePage() {
   useEffect(() => {
@@ -33,13 +32,16 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-      <div className="my-[200px] flex justify-center items-center text-center text-[108px] tracking-widest">
+      <div className="my-[160px] flex justify-center items-center text-center text-[108px] tracking-widest">
         Foto Kelas
       </div>
 
       <div className="flex justify-center text-[32px]">
-        <button onClick={() =>handleRedirect('/image-page')} className="mx-10 bg-black bg-opacity-55 border-2 border-black px-4 py-2 rounded-2xl shadow-xl "> Image Processing</button>
-        <button onClick={() =>handleRedirect('/audio-page')} className="mx-10 bg-black bg-opacity-55 border-2 border-black px-4 py-2 rounded-2xl shadow-xl "> Audio Processing</button>
+        <button onClick={() =>handleRedirect('/image-page')} className="mx-10 bg-black bg-opacity-30 border-2 border-gray-500 px-4 py-2 rounded-2xl shadow-xl ">Image Processing</button>
+        <button onClick={() =>handleRedirect('/audio-page')} className="mx-10 bg-black bg-opacity-30 border-2 border-gray-500 px-4 py-2 rounded-2xl shadow-xl ">Audio Processing</button>
+      </div>
+      <div className="flex justify-center text-[32px] pt-10">
+        <button onClick={() =>handleRedirect('/upload-dataset')} className="mx-10 bg-black bg-opacity-30 border-2 border-gray-500 px-4 py-2 rounded-2xl shadow-xl ">Upload Dataset</button>
       </div>
     </div>
   );

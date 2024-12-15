@@ -1,6 +1,7 @@
 'use client';
 import { useState } from "react";
 import "../../styles/global.css"
+import Header from 'src/components/header';
 
 export default function UploadPage() {
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -30,10 +31,13 @@ export default function UploadPage() {
 
   return (
     <div className="h-screen bg-cover bg-fixed bg-center" style={{ backgroundImage: "url('background.png')" }}>
-      <div className="flex flex-col w-full justify-between gap-5">
+        <div className="py-5">
+            <Header/>
+        </div>
+      <div className="flex flex-col w-full justify-between gap-5 text-center items-center">
         <h1 className="font-bold text-[50px] justify-center">Uploader</h1>
-        <div className="flex flex-col border-2 border-black rounded-xl">
-          Upload Image
+        <div className="flex flex-col border-2 border-black rounded-xl p-5">
+        <h2 className="text-3xl pb-5">Upload Image</h2>
           <input
             type="file"
             accept=".zip,.rar,.7z,.tar,.gz"
@@ -45,11 +49,11 @@ export default function UploadPage() {
             }}
           />
         </div>
-        <div className="flex flex-col border-2 border-black rounded-xl">
-          Upload Audio
+        <div className="flex flex-col border-2 border-black rounded-xl p-5">
+        <h2 className="text-3xl pb-5">Upload Audio</h2>
           <input
             type="file"
-            accept=".zip,.rar,.7z,.tar,.gz"
+            accept=".mid, .zip,.rar,.7z,.tar,.gz"
             onChange={(e) => {
               if (e.target.files && e.target.files.length > 0) {
                 setAudioFile(e.target.files[0]);
@@ -58,8 +62,8 @@ export default function UploadPage() {
             }}
           />
         </div>
-        <div className="flex flex-col border-2 border-black rounded-xl">
-          Upload Mapper
+        <div className="flex flex-col border-2 border-black rounded-xl p-5">
+        <h2 className="text-3xl pb-5">Upload Mapper</h2>
           <input
             type="file"
             accept=".json"
