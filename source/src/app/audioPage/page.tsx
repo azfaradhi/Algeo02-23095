@@ -1,11 +1,9 @@
-// pages/audioPage.tsx
 'use client';
 import { error } from "console";
 import { useEffect, useState } from "react";
 import Header from "src/components/header";
 import "../../styles/global.css"
 
-// Define the type for your result
 type ResultData = {
   namafile: string;
   score: number;
@@ -104,7 +102,6 @@ export default function AudioPage() {
           </form>
         </div>
 
-        {/* Result Display */}
         {result && (
           <div className="bg-slate-600 bg-opacity-60 border-2 border-black text-white rounded-md p-6 max-w-xs w-full">
             <div className="mb-4">
