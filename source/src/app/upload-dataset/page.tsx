@@ -43,6 +43,7 @@ export default function UploadPage() {
 
             const data = await response.json();
             console.log("Dataset files deleted successfully:", data);
+            alert("Dataset files deleted successfully!");
         } catch (error) {
             console.error("Error deleting dataset files:", error);
         }
