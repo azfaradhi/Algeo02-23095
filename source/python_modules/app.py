@@ -1,6 +1,5 @@
 import os
 import time
-import uuid
 import numpy as np
 import logging
 from fastapi import FastAPI, File, UploadFile, HTTPException
@@ -11,24 +10,20 @@ from music_information.final_audio import compare_file_with_database
 from music_information.final_audio import clear_cache
 from fastapi.middleware.cors import CORSMiddleware
 import os, json, zipfile, rarfile
-from fastapi.staticfiles import StaticFiles
 from pca.final_image import compare_image_with_dataset, clear_image_cache
-from fastapi import Body
 from pydantic import BaseModel
-from fastapi.staticfiles import StaticFiles
 
 
 
 app = FastAPI()
 UPLOAD_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'public/dataset')
-# Mounting the folder where images are stored so they can be accessed via HTTP
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Your frontend URL
+    allow_origins=["http://localhost:3000"],  
     allow_credentials=True,
-    allow_methods=["*"],  # Allows all HTTP methods (GET, POST, etc.)
-    allow_headers=["*"],  # Allows all headers
+    allow_methods=["*"], 
+    allow_headers=["*"], 
 )
 
 
@@ -37,15 +32,12 @@ app.add_middleware(
 @app.post("/upload_file/")
 async def upload_file(file: UploadFile = File(...)):
     try:
-        # Ensure the 'uploads' folder exists
         file_location = f"./uploads/{file.filename}"
         os.makedirs(os.path.dirname(file_location), exist_ok=True)
 
-        # Open the file in binary mode and save
         with open(file_location, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
         
-        # Log the size and confirm the file is saved correctly
         file_size = os.path.getsize(file_location)
         print(f"File {file.filename} uploaded with size {file_size} bytes.")
         
@@ -166,14 +158,10 @@ class CompareImageRequest(BaseModel):
 
 @app.post("/compare/image/")
 async def compare_image(request: CompareImageRequest):
-    """
-    Membandingkan gambar yang diunggah dengan dataset yang ada.
-    """
     start_time = time.time()
     print("Comparing image...TIME STARTED")
     uploaded_image_name = request.features
     
-    # Gunakan path yang konsisten dengan upload_image
     current_dir = os.path.dirname(os.path.abspath(__file__))
     dataset_folder = os.path.abspath(os.path.join(current_dir, "..", "..", "source", "public", "dataset","test_image"))
     dataset_path = os.path.join(dataset_folder, uploaded_image_name)
@@ -182,33 +170,28 @@ async def compare_image(request: CompareImageRequest):
     logging.info(f"Dataset Folder: {dataset_folder}")
     logging.info(f"Dataset Path: {dataset_path}")
 
-    # Validasi keberadaan file di folder dataset
     if not os.path.exists(dataset_path):
         logging.error(f"Gambar {uploaded_image_name} tidak ditemukan di dataset.")
         raise HTTPException(status_code=404, detail=f"Gambar {uploaded_image_name} tidak ditemukan di dataset.")
 
     try:
-        # Pastikan path yang digunakan valid dan sesuai
         logging.info(f"Membandingkan gambar {uploaded_image_name} dengan dataset...")
 
-        # Cek file yang ditemukan
         logging.info(f"Dataset folder: {dataset_folder}")
         logging.info(f"Path gambar: {dataset_path}")
         
         results = compare_image_with_dataset(uploaded_image_name)
         logging.info(f"Hasil perbandingan: {results}")
 
-        # Hitung waktu eksekusi
         execution_time = time.time() - start_time
 
         return {
             "message": "Perbandingan selesai.", 
             "results": results,
-            "execution_time": round(execution_time, 4)  # Rounded to 4 decimal places
+            "execution_time": round(execution_time, 4) 
         }
     
     except Exception as e:
-        # Log error secara rinci
         logging.error(f"Error dalam /compare/image/: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Kesalahan saat membandingkan gambar: {e}")
 

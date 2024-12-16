@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Header from "src/components/header";
 import ImageComparisonResults from "./ImageComparisonResults";
-import DatasetBrowser from "./DatasetBrowser"; // Import the new component
+import DatasetBrowser from "./DatasetBrowser";
 import "../../styles/global.css";
 
 type ResultData = {
@@ -27,8 +27,8 @@ export default function ImagePage() {
     if (e.target.files) {
       const file = e.target.files[0];
       setImageFile(file);
-      setQueryImageUrl(URL.createObjectURL(file)); // Preview URL
-      setShowResults(false); // Reset results view
+      setQueryImageUrl(URL.createObjectURL(file)); 
+      setShowResults(false);
     }
   };
 

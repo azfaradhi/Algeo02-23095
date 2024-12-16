@@ -1,5 +1,5 @@
 'use client';
-import { error } from "console";
+
 import { useEffect, useState } from "react";
 import Header from "src/components/header";
 import AudioSubmit from "src/components/audio/audioSubmit";
@@ -45,7 +45,6 @@ export default function AudioPage() {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = albumData.slice(indexOfFirstItem, indexOfLastItem);
 
-  // Calculate the total number of pages
   const totalPages = Math.ceil(albumData.length / itemsPerPage);
 
   return (

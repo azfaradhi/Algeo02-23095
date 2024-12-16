@@ -5,7 +5,6 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import "../../styles/global.css";
 
-// Team member type definition
 type TeamMember = {
   name: string;
   role: string;
@@ -14,8 +13,8 @@ type TeamMember = {
 };
 
 export default function AboutUsPage() {
-  // Sample team members data
-const teamMembers: TeamMember[] = [
+
+  const teamMembers: TeamMember[] = [
     {
         name: "Azfa Radhiyya Hakim",
         role: "13523115",
@@ -36,12 +35,10 @@ const teamMembers: TeamMember[] = [
     }
 ];
 
-  // State to manage selected team member
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
 
   return (
     <div className="relative min-h-screen">
-      {/* Full Background Image */}
       <Image
         src="/background.png"
         alt="Background"
@@ -51,10 +48,8 @@ const teamMembers: TeamMember[] = [
         className="absolute inset-0 z-0"
       />
       
-      {/* Gradient Overlay */}
       <div className="absolute inset-0 bg-black/40 z-1"></div>
 
-      {/* Navigation */}
       <nav className="relative z-10 p-6">
         <Link 
           href="/" 
@@ -64,7 +59,6 @@ const teamMembers: TeamMember[] = [
         </Link>
       </nav>
 
-      {/* Main Content */}
       <div className="relative z-10 container mx-auto px-6 py-12">
         <motion.h1 
           initial={{ opacity: 0, y: -50 }}
@@ -75,7 +69,6 @@ const teamMembers: TeamMember[] = [
           Meet Our Team
         </motion.h1>
 
-        {/* Team Members Grid */}
         <div className="grid md:grid-cols-3 gap-8">
           {teamMembers.map((member) => (
             <motion.div
@@ -110,7 +103,6 @@ const teamMembers: TeamMember[] = [
         </div>
       </div>
 
-      {/* Modal for Member Details */}
       {selectedMember && (
         <div 
           className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-6"

@@ -14,16 +14,15 @@ const ImageComparisonResults: React.FC<ImageComparisonResultsProps> = ({
   results = [] 
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 3; // 6 items per page
+  const itemsPerPage = 3;
 
-  // Prepare results (top 10 sorted by score)
   const processedResults = useMemo(() => {
     return (results || [])
-      .filter(result => result.score >= 0.7) // Filter for >= 70% similarity
+      .filter(result => result.score >= 0.7)
       .sort((a, b) => b.score - a.score);
   }, [results]);
 
-  // Pagination calculations
+  // Pagination 
   const paginationData = useMemo(() => {
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;

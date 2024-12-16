@@ -1,9 +1,7 @@
 import os
-import shutil
 import logging
 import numpy as np
 from fastapi import FastAPI, File, UploadFile, HTTPException
-from pydantic import BaseModel
 from pca.image_processing import process_single_image
 from pca.data_centering import standardize_data, standardized_single_image
 from pca.svd import pca_svd_direct, svd_single_image

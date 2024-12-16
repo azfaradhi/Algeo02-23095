@@ -56,7 +56,7 @@ def midi_processing(namafile):
         meanPitch = np.mean(midiNotes)
         stdPitch = np.std(midiNotes)
         if stdPitch == 0:
-            normalTempo = [0 for _ in midiNotes]  # Set all normalized values to 0
+            normalTempo = [0 for _ in midiNotes]  
         else:
             normalTempo = [(note - meanPitch) / stdPitch for note in midiNotes]
         
@@ -69,16 +69,4 @@ def midi_processing(namafile):
             windows.append(window)
         return windows
     except (OSError, ValueError) as e:
-        return  []# Return an empty list or handle it as needed
-
-
-
-
-# # namafile = "x (26).mid"
-# # midi = mido.MidiFile(namafile)
-# # a = midi_processing(namafile)
-# # print(a)
-
-# # namafile = "beethoven.wav"
-# # windows = wav_processing(namafile)
-# # print(windows)
+        return  []

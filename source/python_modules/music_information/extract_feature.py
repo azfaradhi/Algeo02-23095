@@ -3,22 +3,6 @@ import numpy as np
 import numpy as np
 
 def absolute_tone_based(window):
-    # if len(window) == 0 or any(np.isnan(window)) or any(np.isinf(window)):
-    #     return np.zeros_like(np.arange(0, 128))
-    
-    # bins = np.arange(0, 128)
-    
-    # histogram, bin_edges = np.histogram(window, bins=bins, density=False)
-    
-    # if np.sum(histogram) == 0:
-    #     histogram = np.zeros_like(histogram)
-    
-    # if np.sum(histogram) != 0:
-    #     histogram = histogram / np.sum(histogram)
-    
-    # histogram = np.nan_to_num(histogram)
-    
-    # return histogram
     histogram = np.zeros(128)
 
     for note in window:
@@ -36,10 +20,6 @@ def absolute_tone_based(window):
 
 
 def relative_tone_based(window):
-    # bins = np.arange(-129,129)
-    # intervals = np.diff(window)
-    # histogram,_ = np.histogram(intervals, bins = bins, density=True)
-    # return histogram
     histogram = np.zeros(255)
     if len(window) > 1:
         intervals = np.diff(window)
@@ -81,11 +61,11 @@ def first_tone_based(window):
 
 def extract_feature(windows):
     all_features = []
-    for window in windows:  # window is a single numpy.ndarray
+    for window in windows: 
         window_features = {
-            'atb': absolute_tone_based(window),    # window is numpy.ndarray of shape (20,)
-            'rtb': relative_tone_based(window),    # window is numpy.ndarray of shape (20,)
-            'ftb': first_tone_based(window)     # window is numpy.ndarray of shape (20,)
+            'atb': absolute_tone_based(window),    
+            'rtb': relative_tone_based(window), 
+            'ftb': first_tone_based(window)     
         }
         all_features.append(window_features)
     return all_features
