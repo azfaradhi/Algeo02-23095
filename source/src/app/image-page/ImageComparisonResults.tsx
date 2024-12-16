@@ -19,8 +19,8 @@ const ImageComparisonResults: React.FC<ImageComparisonResultsProps> = ({
   // Prepare results (top 10 sorted by score)
   const processedResults = useMemo(() => {
     return (results || [])
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 10);
+      .filter(result => result.score >= 0.7) // Filter for >= 70% similarity
+      .sort((a, b) => b.score - a.score);
   }, [results]);
 
   // Pagination calculations
@@ -55,7 +55,44 @@ const ImageComparisonResults: React.FC<ImageComparisonResultsProps> = ({
   if (!results || results.length === 0) {
     return (
       <div className="text-white text-center mb-4 bg-slate-600 bg-opacity-60 p-4 rounded-md">
-        No matching images found.
+        No images found in the dataset.
+      </div>
+    );
+  }
+
+  // If no results above 70% similarity
+  if (processedResults.length === 0) {
+    return (
+      <div className="text-white text-center mb-4 bg-slate-600 bg-opacity-60 p-4 rounded-md">
+        No images found with similarity >= 70%. 
+        Showing top 10 closest matches from original results:
+        
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+          {(results || [])
+            .sort((a, b) => b.score - a.score)
+            .slice(0, 10)
+            .map((result) => (
+              <div
+                key={result.namafile}
+                className="bg-slate-600 bg-opacity-60 border-2 border-black text-white rounded-md p-4"
+              >
+                <img
+                  src={`/dataset/test_image/${result.namafile}`}
+                  alt={result.namafile}
+                  className="w-full h-48 object-cover rounded-md mb-2"
+                />
+                <div className="text-sm">
+                  <p className="truncate">
+                    <span className="font-semibold">File:</span> {result.namafile}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Similarity:</span>{' '}
+                    {(result.score * 100).toFixed(2)}%
+                  </p>
+                </div>
+              </div>
+            ))}
+        </div>
       </div>
     );
   }
@@ -63,9 +100,8 @@ const ImageComparisonResults: React.FC<ImageComparisonResultsProps> = ({
   return (
     <div className="w-full max-w-4xl mx-auto">
       <div className="text-white text-center mb-4 bg-slate-600 bg-opacity-60 p-4 rounded-md">
-        Top {Math.min(processedResults.length, 10)} closest matches
+        Top {Math.min(processedResults.length, 10)} matches with ≥ 70% similarity
       </div>
-
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
         {paginationData.currentItems.map((result) => (
           <div
@@ -95,8 +131,8 @@ const ImageComparisonResults: React.FC<ImageComparisonResultsProps> = ({
       {/* Pagination Controls */}
       {paginationData.totalPages > 1 && (
         <div className="flex justify-center items-center space-x-4 mt-4">
-          <button 
-            onClick={prevPage} 
+          <button
+            onClick={prevPage}
             disabled={currentPage === 1}
             className="bg-slate-600 bg-opacity-60 p-2 rounded-md disabled:opacity-50"
           >
@@ -105,8 +141,8 @@ const ImageComparisonResults: React.FC<ImageComparisonResultsProps> = ({
           <span className="text-white">
             Page {currentPage} of {paginationData.totalPages}
           </span>
-          <button 
-            onClick={nextPage} 
+          <button
+            onClick={nextPage}
             disabled={currentPage === paginationData.totalPages}
             className="bg-slate-600 bg-opacity-60 p-2 rounded-md disabled:opacity-50"
           >
