@@ -7,8 +7,8 @@ from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.responses import JSONResponse
 import shutil
 from pydantic import BaseModel
-# from music_information.final_audio import compare_file_with_database
-# from music_information.final_audio import clear_cache
+from music_information.final_audio import compare_file_with_database
+from music_information.final_audio import clear_cache
 from fastapi.middleware.cors import CORSMiddleware
 import os, json, zipfile, rarfile
 from fastapi.staticfiles import StaticFiles

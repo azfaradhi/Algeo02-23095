@@ -50,15 +50,15 @@ export default function AudioPage() {
 
   return (
     <div
-      className="flex flex-col h-screen bg-cover bg-fixed bg-center w-full"
+      className="flex flex-col bg-cover bg-fixed bg-center w-full"
       style={{backgroundImage: "url('background.png')"}}
     >
       <div className="py-10"> 
         <Header />
       </div>
-      <div className="flex w-full  mx-2 justify-center">
+      <div className="flex w-full  mx-2 justify-center pb-10">
         {/* handle submit and show match album */}
-        <div className="w-1/4 text-center"> 
+        <div className="w-5/12 text-center"> 
           <div className="mb-4">
             <AudioSubmit/>  
           </div>
@@ -69,7 +69,7 @@ export default function AudioPage() {
         </div>
 
         {/* list of database */}
-        <div className="text-center w-3/5 mx-5">
+        <div className="text-center w-7/12 mx-5">
         <h2 className="font-bold text-[32px]">Album List</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4">
             {currentItems.map((album, index) => (

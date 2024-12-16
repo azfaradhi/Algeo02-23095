@@ -4,7 +4,7 @@ import '../../styles/global.css'
 import { AlbumData, ResultData } from './types';
 import AudioPlayCard from './audioPlayCard';
 import React, { useEffect, useState } from 'react';
-import { fetchMapperData } from 'src/services/api';
+import { fetchMapperData, fetchFilesFromDataset } from 'src/services/api';
 
 const AudioSubmit = () => {
     const [audioFile, setAudioFile] = useState<File | null>(null);
@@ -19,6 +19,12 @@ const AudioSubmit = () => {
             setAlbumData(data);
           } catch (error) {
             console.error('Error fetching album data:', error);
+            try {
+              const fallbackData = await fetchFilesFromDataset();
+              setAlbumData(fallbackData);
+            } catch (fallbackError) {
+              console.error('Error fetching fallback album data:', fallbackError);
+            }
           }
         };
     
@@ -92,7 +98,7 @@ const AudioSubmit = () => {
         <div className="flex flex-col w-full gap-5 justify-center items-center border border-white rounded-xl">
             {result.len > 0 && (
               <div className='w-full px-5'>
-                <p>test</p>
+                <h1 className='text-3xl pt-5'>Memproses {result.len} data dalam waktu {result.time.toFixed(2)} detik</h1>
                   <ul>
                     {result.album.map((item, index) => {
                         const matchAlbum = albumData.find((album) => album.audio === item.namafile);
