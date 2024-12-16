@@ -1,10 +1,13 @@
 "use client";
 import React, { useState, useRef } from "react";
 import "../../styles/global.css";
+import { ResultData } from "src/components/audio/types";
 
 const RecordingPage = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [audioURL, setAudioURL] = useState("");
+  const [result, setResult] = useState<ResultData[]> ([]);
+  
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const audioChunksRef = useRef<Float32Array[]>([]);
@@ -123,14 +126,44 @@ const RecordingPage = () => {
       } catch (error) {
         console.error("Error uploading file:", error);
       }
+
+      try {
+
+        const namaFileRecord = "recording.wav";
+        console.log("Sending file name:", namaFileRecord);
+
+        const responseRecord = await fetch("http://localhost:8000/compare/audio/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ features: namaFileRecord }),
+        });
+    
+        if (!responseRecord.ok) {
+            const errorData = await responseRecord.text();
+            throw new Error(`HTTP error! status: ${responseRecord.status}, message: ${errorData}`);
+        }
+    
+        const dataRecord: ResultData[] = await responseRecord.json();
+        console.log("Response data:", dataRecord);
+        setResult(dataRecord);
+
+      } catch (error) {
+        console.error("Detailed error:", error);
+      }
+
+
+
     } else {
       console.error("No audio to upload");
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">Recording Page</h1>
+    <div className="flex flex-col items-center w-full px-5">
+    <div className="flex flex-col w-full gap-5 justify-center py-4 items-center border border-white rounded-xl">
+      <h1 className="text-3xl font-bold mb-6">Recording Page</h1>
       <button
         onClick={isRecording ? stopRecording : startRecording}
         className={`px-6 py-2 rounded-lg font-semibold text-white ${
@@ -146,10 +179,11 @@ const RecordingPage = () => {
             onClick={downloadRecording}
             className="px-6 py-2 rounded-lg font-semibold text-white bg-blue-500 hover:bg-blue-600"
           >
-            Download & Upload Recording
+            Upload Recording
           </button>
         </div>
       )}
+    </div>
     </div>
   );
 };
