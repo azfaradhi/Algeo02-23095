@@ -98,7 +98,7 @@ const AudioSubmit = () => {
         <div className="flex flex-col w-full gap-5 justify-center items-center border border-white rounded-xl">
             {result.len > 0 && (
               <div className='w-full px-5'>
-                <h1 className='text-3xl pt-5'>Memproses {result.len} data dalam waktu {result.time.toFixed(2)} detik</h1>
+                <h1 className='text-3xl pt-5'>Memproses {result.len} data dalam waktu {(result.time * 1000).toFixed(2)} ms</h1>
                   <ul>
                     {result.album.map((item, index) => {
                         const matchAlbum = albumData.find((album) => album.audio === item.namafile);
@@ -107,6 +107,12 @@ const AudioSubmit = () => {
                                 {matchAlbum && (
                                     <div className="mt-4">
                                         <AudioPlayCard album={matchAlbum} score={item.score} />
+                                    </div>
+                                )}
+                                {!matchAlbum && (
+                                    <div className="mt-4 flex w-full justify-between">
+                                      <h2 className="text-xl">{item.namafile}</h2>
+                                      <h2 className="text-xl">{(item.score * 100 ).toFixed(2)}%</h2>
                                     </div>
                                 )}
                             </li>
