@@ -5,7 +5,8 @@ import Header from "src/components/header";
 import AudioSubmit from "src/components/audio/audioSubmit";
 import "../../styles/global.css"
 import AudioCard from "src/components/audio/audioCard";
-import { fetchMapperData } from '../../services/api';
+import { fetchFilesFromDataset, fetchMapperData } from '../../services/api';
+import RecordingPage from "../recording/page";
 
 type AlbumData = {
   audio: string;
@@ -26,6 +27,12 @@ export default function AudioPage() {
         setAlbumData(data);
       } catch (error) {
         console.error('Error fetching album data:', error);
+        try {
+          const fallbackData = await fetchFilesFromDataset();
+          setAlbumData(fallbackData);
+        } catch (fallbackError) {
+          console.error('Error fetching fallback album data:', fallbackError);
+        }
       }
     };
 
@@ -48,10 +55,16 @@ export default function AudioPage() {
       <div className="py-10"> 
         <Header />
       </div>
-      <div className="flex w-full">
+      <div className="flex w-full  mx-2 justify-center">
         {/* handle submit and show match album */}
-        <div className="w-2/5 text-center">
-          <AudioSubmit/>
+        <div className="w-1/4 text-center"> 
+          <div className="mb-4">
+            <AudioSubmit/>  
+          </div>
+
+          <div className="mt-10">
+            <RecordingPage />
+          </div>
         </div>
 
         {/* list of database */}
