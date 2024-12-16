@@ -110,7 +110,6 @@ async def save_file(file: UploadFile, subdir: str):
         
         with open(file_path, "wb") as f:
             f.write(await file.read())
-        clear_cache()
         return JSONResponse(content={"message": "File uploaded successfully", "filename": file.filename})
     except Exception as e:
         return JSONResponse(content={"message": str(e)}, status_code=500)
@@ -138,7 +137,6 @@ async def save_zipfile(file: UploadFile, subdir: str):
             raise HTTPException(status_code=400, detail="Unsupported file type")
 
         os.remove(temp_file_location)
-        clear_cache()
         return JSONResponse(content={"message": "File uploaded successfully", "filename": file.filename})
     except Exception as e:
         return JSONResponse(content={"message": str(e)}, status_code=500)
