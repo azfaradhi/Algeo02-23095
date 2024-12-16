@@ -94,54 +94,56 @@ const AudioSubmit = () => {
     //     : null;
 
     return (
-        <div className="flex flex-col items-center w-full px-5">
-        <div className="flex flex-col w-full gap-5 justify-center items-center border border-white rounded-xl">
-            {result.len > 0 && (
-              <div className='w-full px-5'>
-                <h1 className='text-3xl pt-5'>Memproses {result.len} data dalam waktu {(result.time * 1000).toFixed(2)} ms</h1>
-                  <ul>
-                    {result.album.map((item, index) => {
-                        const matchAlbum = albumData.find((album) => album.audio === item.namafile);
-                        return (
-                            <li key={index}>
-                                {matchAlbum && (
-                                    <div className="mt-4">
-                                        <AudioPlayCard album={matchAlbum} score={item.score} />
-                                    </div>
-                                )}
-                                {!matchAlbum && (
+      <div className="flex flex-col items-center w-full px-5">
+      <div className="flex flex-col  w-full gap-5 justify-center items-center border border-white rounded-xl">
+          {result.len > 0 && (
+            <div className='w-full px-5'>
+              <h1 className='text-3xl font-extrabold pt-5'>Memproses {result.len} data dalam waktu {(result.time * 1000).toFixed(2)} ms</h1>
+                <ul className=' overflow-y-scroll max-h-screen'>
+                  {result.album.map((item, index) => {
+                      const matchAlbum = albumData.find((album) => album.audio === item.namafile);
+                      return (
+                          <li key={index}>
+                              {matchAlbum && (
+                                  <div className="mt-4">
+                                      <AudioPlayCard album={matchAlbum} score={item.score} />
+                                  </div>
+                              )}
+                              {!matchAlbum && (
+                                  <div className="mt-4 flex w-full justify-between">
+                                    <h2 className="text-xl">{item.namafile}</h2>
+                                    <h2 className="text-xl text-center">{item.namafile}</h2>
+                                    <h2 className="text-xl">{(item.score * 100 ).toFixed(2)}%</h2>
+                                  </div>
+                              )}
+                          </li>
+                      );
+                  })}
+                </ul>
+              </div>
+          )}
+          <form onSubmit={handleSubmit} className="">
+              <div className="flex justify-center">
+                  <input 
+                  type="file" 
+                  onChange={handleFileChange} 
+                  className="border border-gray-300 rounded-md p-6 mt-5 w-full max-w-xs"
+                  />
+              </div>
+              <div className="flex justify-center">
+                  <button 
+                      type="submit" 
+                      disabled={isLoading}
+                      className="bg-slate-600 bg-opacity-60 border-2 my-5 border-black text-white font-semibold py-2 px-4 rounded-md w-full max-w-xs hover:bg-transparent hover:border-2 transition duration-200 disabled:opacity-50"
+                  >
+                  {isLoading ? 'Processing...' : 'Upload File'}
+                  </button>
+              </div>
+          </form>
 
-                                      <h2 className="text-xl">{(item.score * 100 ).toFixed(2)}%</h2>
-                                    </div>
-                                )}
-                            </li>
-                        );
-                    })}
-                  </ul>
-                </div>
-            )}
-            <form onSubmit={handleSubmit} className="">
-                <div className="flex justify-center">
-                    <input 
-                    type="file" 
-                    onChange={handleFileChange} 
-                    className="border border-gray-300 rounded-md p-6 mt-5 w-full max-w-xs"
-                    />
-                </div>
-                <div className="flex justify-center">
-                    <button 
-                        type="submit" 
-                        disabled={isLoading}
-                        className="bg-slate-600 bg-opacity-60 border-2 my-5 border-black text-white font-semibold py-2 px-4 rounded-md w-full max-w-xs hover:bg-transparent hover:border-2 transition duration-200 disabled:opacity-50"
-                    >
-                    {isLoading ? 'Processing...' : 'Upload File'}
-                    </button>
-                </div>
-            </form>
-            
-        </div>
-    </div>
-    );
+      </div>
+  </div>
+  );
 };
 
 export default AudioSubmit;
