@@ -6,7 +6,7 @@ import { ResultData } from "src/components/audio/types";
 const RecordingPage = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [audioURL, setAudioURL] = useState("");
-  const [result, setResult] = useState<ResultData>({ album: [], time: 0, len: 0 });
+  const [result, setResult] = useState<ResultData>({ album: [], time: 0, len: 0, result: 0 });
   const [isLoading, setIsLoading] = useState(false);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
