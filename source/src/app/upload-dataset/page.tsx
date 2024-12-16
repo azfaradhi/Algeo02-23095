@@ -9,38 +9,43 @@ export default function UploadPage() {
     const [mapperFile, setMapperFile] = useState<File | null>(null);
 
 
-    const handleFileUpload = async (files: File[], endpoint: string) => {
-    const formData = new FormData();
-    files.forEach((file) => formData.append("files", file));
+    const handleFileUpload = async (file: File, endpoint: string) => {
+        const formData = new FormData();
+        formData.append("file", file)
 
 
-    try {
-        const response = await fetch(endpoint, {
-            method: "POST",
-            body: formData,
-        });
+        try {
+            const response = await fetch(endpoint, {
+                method: "POST",
+                body: formData,
+            });
 
-        if (!response.ok) {
-            throw new Error("File upload failed");
+            if (!response.ok) {
+                throw new Error("File upload failed");
+            }
+
+            const data = await response.json();
+            console.log("File uploaded successfully:", data);
+        } catch (error) {
+            console.error("Error uploading file:", error);
         }
-
-        const data = await response.json();
-        console.log("File uploaded successfully:", data);
-    } catch (error) {
-        console.error("Error uploading file:", error);
-    }
     };
 
   const handleSubmit = async () => {
+    console.log(audioFiles);
     try {
         if (imageFiles.length > 0) {
-            await handleFileUpload(imageFiles, "http://localhost:8000/upload_image");
+            imageFiles.map(async (file) => {
+                await handleFileUpload(file, "http://localhost:8000/upload_image");
+            });
         }
         if (audioFiles.length > 0 ) {
-            await handleFileUpload(audioFiles, "http://localhost:8000/upload_audio");
+            audioFiles.map(async (file) => {
+                await handleFileUpload(file, "http://localhost:8000/upload_audio");
+            });
         }
         if (mapperFile) {
-            await handleFileUpload([mapperFile], "http://localhost:8000/upload_mapper");
+            await handleFileUpload(mapperFile, "http://localhost:8000/upload_mapper");
         }
     } catch (error) {
         console.error("Error uploading file:", error);
@@ -64,7 +69,7 @@ export default function UploadPage() {
         <h2 className="text-3xl pb-5">Upload Image</h2>
           <input
             type="file"
-            accept=".zip,.rar,.7z,.tar,.gz"
+            accept=".zip,.png,.jpg,.jpeg,.bmp,.gif,.tiff"
             multiple
             onChange={(e) => handleFileChange(e, setImageFiles)}
           />
@@ -73,7 +78,7 @@ export default function UploadPage() {
         <h2 className="text-3xl pb-5">Upload Audio</h2>
           <input
             type="file"
-            accept=".mid,.zip,.rar,.7z,.tar,.gz,.wav"
+            accept=".mid,.zip,.wav"
             multiple
             onChange={(e) => handleFileChange(e, setAudioFiles)}
           />
