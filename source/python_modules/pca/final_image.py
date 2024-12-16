@@ -23,7 +23,7 @@ def compare_image_with_dataset(uploadedImageName):
         list: A list of results with filenames and their similarity scores.
     """
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    dataset_folder = os.path.abspath(os.path.join(current_dir, "..", "..", "public", "dataset","image_datasets"))
+    dataset_folder = os.path.abspath(os.path.join(current_dir, "..", "..", "public", "dataset","test_image"))
     k = 50
 
     # Step 1: Load dataset vectors

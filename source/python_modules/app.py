@@ -140,7 +140,7 @@ async def upload_image(file: UploadFile = File(...)):
     """
     print("Uploading image...")
     try:
-        file_location = f"../public/dataset/image_datasets/{file.filename}"
+        file_location = f"../public/dataset/test_image/{file.filename}"
         os.makedirs(os.path.dirname(file_location), exist_ok=True)
         print(f"File path: {file.filename}")
 
@@ -166,7 +166,7 @@ async def compare_image(request: CompareImageRequest):
     
     # Gunakan path yang konsisten dengan upload_image
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    dataset_folder = os.path.abspath(os.path.join(current_dir, "..", "..", "source", "public", "dataset","image_datasets"))
+    dataset_folder = os.path.abspath(os.path.join(current_dir, "..", "..", "source", "public", "dataset","test_image"))
     dataset_path = os.path.join(dataset_folder, uploaded_image_name)
     
     logging.info(f"Current Directory: {current_dir}")
