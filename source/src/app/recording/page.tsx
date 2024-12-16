@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "../../styles/global.css";
 import { ResultData, AlbumData } from "src/components/audio/types";
 import AudioPlayCard from "src/components/audio/audioPlayCard";
@@ -7,78 +7,91 @@ import AudioPlayCard from "src/components/audio/audioPlayCard";
 const RecordingPage = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [audioURL, setAudioURL] = useState("");
-  const [result, setResult] = useState<ResultData>({ album: [], time: 0, len: 0, result: 0});
-  const [albumData, setAlbumData] = useState<AlbumData[]>([]);
-  
+  const [result, setResult] = useState<ResultData>({ album: [], time: 0, len: 0, result: 0 });
+  const [isLoading, setIsLoading] = useState(false);
+
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const audioChunksRef = useRef<Float32Array[]>([]);
   const processorRef = useRef<ScriptProcessorNode | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
+  const audioSourceRef = useRef<MediaStreamAudioSourceNode | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const soundDetectedRef = useRef(false);
 
   const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
-      console.log("Stream acquired:", stream);
 
       audioContextRef.current = new AudioContext();
       const source = audioContextRef.current.createMediaStreamSource(stream);
       const processor = audioContextRef.current.createScriptProcessor(4096, 1, 1);
       processorRef.current = processor;
-      
-      source.connect(processor);
+
+      const analyser = audioContextRef.current.createAnalyser();
+      analyser.fftSize = 2048;
+      analyserRef.current = analyser;
+
+      audioSourceRef.current = source;
+      source.connect(analyser);
+      analyser.connect(processor);
       processor.connect(audioContextRef.current.destination);
-      
+
       processor.onaudioprocess = (e) => {
         const channelData = e.inputBuffer.getChannelData(0);
         audioChunksRef.current.push(new Float32Array(channelData));
+
+        // Sound detection logic
+        const dataArray = new Uint8Array(analyser.fftSize);
+        analyser.getByteFrequencyData(dataArray);
+
+        const volume = dataArray.reduce((sum, value) => sum + value, 0) / dataArray.length;
+        if (volume > 10) {
+          soundDetectedRef.current = true;
+        }
       };
 
-      console.log("Recording started");
       setIsRecording(true);
+      console.log("Recording started");
     } catch (error) {
       console.error("Error starting recording:", error);
     }
   };
 
   const stopRecording = () => {
-    if (audioContextRef.current && audioChunksRef.current.length > 0) {
-      // Clean up audio processing
+    if (audioContextRef.current) {
       if (processorRef.current) {
         processorRef.current.disconnect();
       }
       if (streamRef.current) {
-        streamRef.current.getTracks().forEach(track => track.stop());
+        streamRef.current.getTracks().forEach((track) => track.stop());
       }
 
       const sampleRate = audioContextRef.current.sampleRate;
       const numChannels = 1;
-      
-      // Concatenate all audio chunks
+
       const length = audioChunksRef.current.reduce((acc, curr) => acc + curr.length, 0);
       const audioData = new Float32Array(length);
       let offset = 0;
-      audioChunksRef.current.forEach(chunk => {
+      audioChunksRef.current.forEach((chunk) => {
         audioData.set(chunk, offset);
         offset += chunk.length;
       });
 
-      // Create WAV file
       const buffer = new ArrayBuffer(44 + audioData.length * 2);
       const view = new DataView(buffer);
 
-      // Write WAV header
       const writeString = (view: DataView, offset: number, string: string) => {
         for (let i = 0; i < string.length; i++) {
           view.setUint8(offset + i, string.charCodeAt(i));
         }
       };
 
-      writeString(view, 0, 'RIFF');
+      writeString(view, 0, "RIFF");
       view.setUint32(4, 36 + audioData.length * 2, true);
-      writeString(view, 8, 'WAVE');
-      writeString(view, 12, 'fmt ');
+      writeString(view, 8, "WAVE");
+      writeString(view, 12, "fmt ");
       view.setUint32(16, 16, true);
       view.setUint16(20, 1, true);
       view.setUint16(22, numChannels, true);
@@ -86,81 +99,107 @@ const RecordingPage = () => {
       view.setUint32(28, sampleRate * 2, true);
       view.setUint16(32, numChannels * 2, true);
       view.setUint16(34, 16, true);
-      writeString(view, 36, 'data');
+      writeString(view, 36, "data");
       view.setUint32(40, audioData.length * 2, true);
 
-      // Write audio data
       const volume = 0.8;
       for (let i = 0; i < audioData.length; i++) {
         const sample = Math.max(-1, Math.min(1, audioData[i]));
-        view.setInt16(44 + i * 2, sample * 0x7FFF * volume, true);
+        view.setInt16(44 + i * 2, sample * 0x7fff * volume, true);
       }
 
-      const blob = new Blob([buffer], { type: 'audio/wav' });
+      const blob = new Blob([buffer], { type: "audio/wav" });
       const audioUrl = URL.createObjectURL(blob);
       setAudioURL(audioUrl);
-      
-      // Reset recording state
+
       audioChunksRef.current = [];
       setIsRecording(false);
       console.log("Recording stopped and WAV file created");
+      return blob;
     }
+    return null;
   };
 
-  const downloadRecording = async () => {
-    if (audioURL) {
-      const audioBlob = await fetch(audioURL).then(response => response.blob());
+  const uploadRecording = async (audioBlob: Blob) => {
+    if (audioBlob) {
       const formData = new FormData();
       formData.append("file", audioBlob, "recording.wav");
+      setIsLoading(true);
 
       try {
-        const response = await fetch("http://localhost:8000/upload_file/", {
+        // First upload the file
+        const uploadResponse = await fetch("http://localhost:8000/upload_file/", {
           method: "POST",
           body: formData,
         });
 
-        if (!response.ok) {
+        if (!uploadResponse.ok) {
           throw new Error("File upload failed");
         }
 
-        const data = await response.json();
-        console.log("Upload successful:", data);
-      } catch (error) {
-        console.error("Error uploading file:", error);
-      }
+        const uploadData = await uploadResponse.json();
+        console.log("Upload successful:", uploadData);
 
-      try {
-
-        const namaFileRecord = "recording.wav";
-        console.log("Sending file name:", namaFileRecord);
-
-        const responseRecord = await fetch("http://localhost:8000/compare/audio/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ features: namaFileRecord }),
+        // Then compare the audio
+        const compareResponse = await fetch("http://localhost:8000/compare/audio/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ features: "recording.wav" }),
         });
-    
-        if (!responseRecord.ok) {
-            const errorData = await responseRecord.text();
-            throw new Error(`HTTP error! status: ${responseRecord.status}, message: ${errorData}`);
+
+        if (!compareResponse.ok) {
+          const errorData = await compareResponse.text();
+          throw new Error(`HTTP error! status: ${compareResponse.status}, message: ${errorData}`);
         }
     
         const dataRecord: ResultData = await responseRecord.json();
         console.log("Response data:", dataRecord);
         setResult(dataRecord);
 
+
+        const compareData: ResultData = await compareResponse.json();
+        console.log("Comparison data:", compareData);
+        setResult(compareData);
       } catch (error) {
-        console.error("Detailed error:", error);
+        console.error("Error uploading or comparing file:", error);
+      } finally {
+        setIsLoading(false);
       }
-
-
-
     } else {
       console.error("No audio to upload");
     }
   };
+
+  useEffect(() => {
+    let soundDetectionInterval: NodeJS.Timeout | null = null;
+
+    if (isRecording) {
+      let soundDetectedTime = 0;
+
+      soundDetectionInterval = setInterval(() => {
+        if (soundDetectedRef.current) {
+          soundDetectedTime += 1;
+          if (soundDetectedTime >= 5) {
+            const audioBlob = stopRecording();
+            if (audioBlob) {
+              uploadRecording(audioBlob);
+            }
+            if (soundDetectionInterval) {
+              clearInterval(soundDetectionInterval);
+            }
+          }
+        } else {
+          soundDetectedTime = 0;
+        }
+      }, 1000);
+    }
+
+    return () => {
+      if (soundDetectionInterval) clearInterval(soundDetectionInterval);
+    };
+  }, [isRecording]);
 
   return (
     <div className="flex flex-col items-center w-full px-5">
@@ -211,6 +250,7 @@ const RecordingPage = () => {
         </div>
       )}
     </div>
+
     </div>
   );
 };
