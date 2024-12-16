@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import "../../styles/global.css";
-import { ResultData, AlbumData } from "src/components/audio/types";
+import { AlbumData, ResultData } from "src/components/audio/types";
 import AudioPlayCard from "src/components/audio/audioPlayCard";
 
 const RecordingPage = () => {
@@ -9,6 +9,7 @@ const RecordingPage = () => {
   const [audioURL, setAudioURL] = useState("");
   const [result, setResult] = useState<ResultData>({ album: [], time: 0, len: 0, result: 0 });
   const [isLoading, setIsLoading] = useState(false);
+  const [albumData, setAlbumData] = useState<AlbumData[]>([]);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
@@ -127,7 +128,6 @@ const RecordingPage = () => {
       setIsLoading(true);
 
       try {
-        // First upload the file
         const uploadResponse = await fetch("http://localhost:8000/upload_file/", {
           method: "POST",
           body: formData,
@@ -140,7 +140,6 @@ const RecordingPage = () => {
         const uploadData = await uploadResponse.json();
         console.log("Upload successful:", uploadData);
 
-        // Then compare the audio
         const compareResponse = await fetch("http://localhost:8000/compare/audio/", {
           method: "POST",
           headers: {
@@ -153,11 +152,6 @@ const RecordingPage = () => {
           const errorData = await compareResponse.text();
           throw new Error(`HTTP error! status: ${compareResponse.status}, message: ${errorData}`);
         }
-    
-        const dataRecord: ResultData = await responseRecord.json();
-        console.log("Response data:", dataRecord);
-        setResult(dataRecord);
-
 
         const compareData: ResultData = await compareResponse.json();
         console.log("Comparison data:", compareData);
@@ -186,9 +180,7 @@ const RecordingPage = () => {
             if (audioBlob) {
               uploadRecording(audioBlob);
             }
-            if (soundDetectionInterval) {
-              clearInterval(soundDetectionInterval);
-            }
+            if (soundDetectionInterval) clearInterval(soundDetectionInterval);
           }
         } else {
           soundDetectedTime = 0;
@@ -196,9 +188,6 @@ const RecordingPage = () => {
       }, 1000);
     }
 
-    return () => {
-      if (soundDetectionInterval) clearInterval(soundDetectionInterval);
-    };
   }, [isRecording]);
 
   return (
@@ -207,7 +196,7 @@ const RecordingPage = () => {
       <h1 className="text-3xl font-bold mb-6">Recording Page</h1>
       {result.len > 0 && (
               <div className='w-full px-5'>
-                <h1 className='text-3xl pt-5'>Memproses {result.len} data dalam waktu {result.time.toFixed(2)} detik</h1>
+                <h1 className='text-3xl pt-5'>Memproses {result.len} data dalam waktu {(result.time * 1000).toFixed(2)} ms</h1>
                   <ul>
                     {result.album.map((item, index) => {
                         const matchAlbum = albumData.find((album) => album.audio === item.namafile);
@@ -241,16 +230,9 @@ const RecordingPage = () => {
       {audioURL && (
         <div className="mt-6 flex flex-col items-center">
           <audio src={audioURL} controls className="mb-4" />
-          <button
-            onClick={downloadRecording}
-            className="px-6 py-2 rounded-lg font-semibold text-white bg-blue-500 hover:bg-blue-600"
-          >
-            Upload Recording
-          </button>
         </div>
       )}
     </div>
-
     </div>
   );
 };
