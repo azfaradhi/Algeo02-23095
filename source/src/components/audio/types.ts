@@ -13,7 +13,13 @@ export const instruments = [
     'flute',
 ];
 
-export type ResultData = {
+export type AlbumResultData = {
     namafile: string;
     score: number;
+};
+
+export type ResultData = {
+    album: AlbumResultData[];
+    time: number;
+    len: number;
 };

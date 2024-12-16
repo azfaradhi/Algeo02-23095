@@ -7,8 +7,8 @@ from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.responses import JSONResponse
 import shutil
 from pydantic import BaseModel
-# from music_information.final_audio import compare_file_with_database
-# from music_information.final_audio import clear_cache
+from music_information.final_audio import compare_file_with_database
+from music_information.final_audio import clear_cache
 from fastapi.middleware.cors import CORSMiddleware
 import os, json, zipfile, rarfile
 from fastapi.staticfiles import StaticFiles
@@ -88,13 +88,14 @@ async def get_files():
 
 @app.post("/upload_image")
 async def upload_image(file: UploadFile = File(...)):
-    return await save_zipfile(file, "image")
+    if file.filename.endswith('.png') or file.filename.endswith('.jpg') or file.filename.endswith('.jpeg'):
+        return await save_file(file, "test_image")
+    return await save_zipfile(file, "test_image")
 
 @app.post("/upload_audio")
 async def upload_audio(file: UploadFile = File(...)):
     if file.filename.endswith('.mid') or file.filename.endswith('.wav'):
         return await save_file(file, "test_audio")
-    print("Efwefs")
     return await save_zipfile(file, "test_audio")
 
 @app.post("/upload_mapper")
@@ -109,6 +110,7 @@ async def save_file(file: UploadFile, subdir: str):
         
         with open(file_path, "wb") as f:
             f.write(await file.read())
+        clear_cache()
         return JSONResponse(content={"message": "File uploaded successfully", "filename": file.filename})
     except Exception as e:
         return JSONResponse(content={"message": str(e)}, status_code=500)
@@ -116,7 +118,7 @@ async def save_file(file: UploadFile, subdir: str):
 
 async def save_zipfile(file: UploadFile, subdir: str):
     try:
-        temp_file_location = os.path.join(UPLOAD_DIR, file.filename)
+        temp_file_location = os.path.join(UPLOAD_DIR,file.filename)
         with open(temp_file_location, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
 
@@ -217,3 +219,13 @@ async def get_dataset_images():
     dataset_path = "../public/dataset/test_image"
     image_files = [f for f in os.listdir(dataset_path) if f.endswith(('.png', '.jpg', '.jpeg'))]
     return [{"filename": filename} for filename in image_files]
+
+@app.get("/delete_dataset")
+async def delete_dataset():
+    try:
+        shutil.rmtree("../public/dataset/test_audio")
+        shutil.rmtree("../public/dataset/test_image")
+        clear_cache()
+        return {"message": "Dataset berhasil dihapus."}
+    except Exception as e:
+        return JSONResponse(content={"message": str(e)}, status_code=500)

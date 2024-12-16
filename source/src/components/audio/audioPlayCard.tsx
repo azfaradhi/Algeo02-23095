@@ -7,7 +7,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import MIDIPlayer from 'midi-player-js';
 import Soundfont from 'soundfont-player';
 import { AlbumData } from './types';
-import { instruments } from './types';
+// import { instruments } from './types';
 
 type AudioPlayCardProps = {
   album: AlbumData;
@@ -32,7 +32,7 @@ const AudioPlayCard: React.FC<AudioPlayCardProps> = ({album, score}) => {
 
     playerRef.current = player;
 
-    fetch(`/dataset/test_midi_dataset/${album.audio}`)
+    fetch(`/dataset/test_audio/${album.audio}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Failed to load MIDI file');
@@ -83,19 +83,20 @@ const AudioPlayCard: React.FC<AudioPlayCardProps> = ({album, score}) => {
   // };
 
   return (
-    <div className="flex gap-4 justify-start text-left items-center border bg-white bg-opacity-15 border-white rounded-xl">
-      <img src={`/dataset/test_image/${album.image}`} alt={album.image} className="w-32 h-32" />
+    <div className="flex gap-4 p-5 justify-between text-left items-center border bg-white bg-opacity-15 border-white rounded-xl">
+      <div className=' flex items-center gap-4 '>
+      <img src={`/dataset/test_image/${album.image}`} alt={album.image} className="w-32 h-32 rounded-xl" />
       <div className='flex flex-col'>
         <h1 className="text-2xl font-bold">{album.songName}</h1>
         <h2 className="text-xl">{album.artist}</h2>
-        <h2 className="text-xl mb-4">Similarity score: {(score * 100).toFixed(2)}%</h2>
-        <div className="flex space-x-4">
-        <button onClick={handlePlay} className="px-4 py-2 text-white rounded">Play</button>
-        <button onClick={handlePause} className="px-4 py-2  text-white rounded">Pause</button>
-        <button onClick={handleStop} className="px-4 py-2  text-white rounded">Stop</button>
+        <h2 className="text-xl mb-4">Similarity score: {(score * 100).toFixed(2)}%</h2>        
       </div>
-    </div>
-
+      </div>
+      <div className="flex flex-col space-x-4 justify-center text-center items-center">
+        <button onClick={handlePlay} className="px-4 py-2 w-full text-white rounded">Play</button>
+        <button onClick={handlePause} className="px-4 py-2 w-full text-white rounded">Pause</button>
+        <button onClick={handleStop} className="px-4 py-2 w-full text-white rounded">Stop</button>
+      </div>
     </div>
   );
 };
