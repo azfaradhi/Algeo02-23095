@@ -52,18 +52,19 @@ export default function UploadPage() {
     console.log(audioFiles);
     try {
         if (imageFiles.length > 0) {
-            imageFiles.map(async (file) => {
+            await Promise.all(imageFiles.map(async (file) => {
                 await handleFileUpload(file, "http://localhost:8000/upload_image");
-            });
+            }));
         }
         if (audioFiles.length > 0 ) {
-            audioFiles.map(async (file) => {
+            await Promise.all(audioFiles.map(async (file) => {
                 await handleFileUpload(file, "http://localhost:8000/upload_audio");
-            });
+            }));
         }
         if (mapperFile) {
             await handleFileUpload(mapperFile, "http://localhost:8000/upload_mapper");
         }
+        alert("Files uploaded successfully!");
     } catch (error) {
         console.error("Error uploading file:", error);
     }
