@@ -88,7 +88,9 @@ async def get_files():
 
 @app.post("/upload_image")
 async def upload_image(file: UploadFile = File(...)):
-    return await save_zipfile(file, "image")
+    if file.filename.endswith('.png') or file.filename.endswith('.jpg') or file.filename.endswith('.jpeg'):
+        return await save_file(file, "test_image")
+    return await save_zipfile(file, "test_image")
 
 @app.post("/upload_audio")
 async def upload_audio(file: UploadFile = File(...)):
@@ -116,7 +118,7 @@ async def save_file(file: UploadFile, subdir: str):
 
 async def save_zipfile(file: UploadFile, subdir: str):
     try:
-        temp_file_location = os.path.join(UPLOAD_DIR, file.filename)
+        temp_file_location = os.path.join(UPLOAD_DIR,file.filename)
         with open(temp_file_location, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
 
