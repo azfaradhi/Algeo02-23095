@@ -20,19 +20,19 @@ const teamMembers: TeamMember[] = [
         name: "Azfa Radhiyya Hakim",
         role: "13523115",
         image: "/radhi.jpg",
-        description: "Why don't scientists trust atoms? Because they make up everything!"
+        description: "One Shot One Kill (Nada Franco)"
     },
     {
         name: "Rafif Farras",
         role: "13523095",
         image: "/rafiff.jpg",
-        description: "Why don't skeletons fight each other? They don't have the guts!"
+        description: "ez pz"
     },
     {
         name: "Barru Adi Utomo",
         role: "13523101",
         image: "/barru.jpg",
-        description: "Why did the scarecrow win an award? Because he was outstanding in his field!"
+        description: "Nanti aku tulis sendiri"
     }
 ];
 
@@ -87,7 +87,7 @@ const teamMembers: TeamMember[] = [
               className="bg-white/10 backdrop-blur-sm rounded-xl shadow-xl overflow-hidden border border-white/20"
               onClick={() => setSelectedMember(member)}
             >
-              <div className="relative h-96 w-full group">
+              <div className="relative h-72 w-auto group">
                 <Image 
                   src={member.image} 
                   alt={member.name}
