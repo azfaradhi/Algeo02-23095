@@ -74,7 +74,7 @@ const ImageComparisonResults: React.FC<ImageComparisonResultsProps> = ({
           >
             <div className="mb-2">
               <img
-                src={`http://localhost:8000/image_dataset/${result.namafile}`}
+                src={`/dataset/test_image/${result.namafile}`}
                 alt={result.namafile}
                 className="w-full h-48 object-cover rounded-md mb-2"
               />
