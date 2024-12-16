@@ -8,7 +8,7 @@ import { fetchMapperData } from 'src/services/api';
 
 const AudioSubmit = () => {
     const [audioFile, setAudioFile] = useState<File | null>(null);
-    const [result, setResult] = useState<ResultData[]> ([]);
+    const [result, setResult] = useState<ResultData>({ album: [], time: 0, len: 0 });
     const [isLoading, setIsLoading] = useState(false);
     const [albumData, setAlbumData] = useState<AlbumData[]>([]);
 
@@ -72,8 +72,9 @@ const AudioSubmit = () => {
             throw new Error(`HTTP error! status: ${response2.status}, message: ${errorData}`);
           }
         
-          const data2: ResultData[] = await response2.json();
+          const data2: ResultData = await response2.json();
           console.log("Response data:", data2);
+          console.log("Response data:", data2.len);
           setResult(data2);
         } catch (error) {
           console.error("Detailed error:", error);
@@ -89,10 +90,11 @@ const AudioSubmit = () => {
     return (
         <div className="flex flex-col items-center w-full px-5">
         <div className="flex flex-col w-full gap-5 justify-center items-center border border-white rounded-xl">
-            {result.length > 0 && (
-                <div className='w-full px-5'>
+            {result.len > 0 && (
+              <div className='w-full px-5'>
+                <p>test</p>
                   <ul>
-                    {result.map((item, index) => {
+                    {result.album.map((item, index) => {
                         const matchAlbum = albumData.find((album) => album.audio === item.namafile);
                         return (
                             <li key={index}>

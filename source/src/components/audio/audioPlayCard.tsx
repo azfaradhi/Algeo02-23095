@@ -7,7 +7,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import MIDIPlayer from 'midi-player-js';
 import Soundfont from 'soundfont-player';
 import { AlbumData } from './types';
-import { instruments } from './types';
+// import { instruments } from './types';
 
 type AudioPlayCardProps = {
   album: AlbumData;
@@ -32,7 +32,7 @@ const AudioPlayCard: React.FC<AudioPlayCardProps> = ({album, score}) => {
 
     playerRef.current = player;
 
-    fetch(`/dataset/test_midi_dataset/${album.audio}`)
+    fetch(`/dataset/test_audio/${album.audio}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Failed to load MIDI file');
