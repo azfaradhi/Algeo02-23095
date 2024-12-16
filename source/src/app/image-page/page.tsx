@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Header from "src/components/header";
 import ImageComparisonResults from "./ImageComparisonResults";
+import DatasetBrowser from "./DatasetBrowser"; // Import the new component
 import "../../styles/global.css";
 
 type ResultData = {
@@ -20,12 +21,14 @@ export default function ImagePage() {
   const [results, setResults] = useState<ResultData[] | null>(null);
   const [executionTime, setExecutionTime] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showResults, setShowResults] = useState(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const file = e.target.files[0];
       setImageFile(file);
       setQueryImageUrl(URL.createObjectURL(file)); // Preview URL
+      setShowResults(false); // Reset results view
     }
   };
 
@@ -83,6 +86,7 @@ export default function ImagePage() {
         .slice(0, 10);
 
       setResults(filteredResults);
+      setShowResults(true);
 
       if (data2.execution_time) {
         setExecutionTime(data2.execution_time);
@@ -141,20 +145,24 @@ export default function ImagePage() {
         </div>
 
         {/* Execution Time Display */}
-        {executionTime !== null && (
+        {executionTime !== null && showResults && (
           <div className="text-white text-center mb-4 bg-slate-600 bg-opacity-60 p-4 rounded-md">
             Execution Time: {executionTime} seconds
           </div>
         )}
 
-        {/* Results Display */}
-        {results && (
-          <div className="w-full max-w-4xl">
-            <h3 className="text-white font-semibold mb-4 text-center">
-              Comparison Results
-            </h3>
-            <ImageComparisonResults results={results} />
-          </div>
+        {/* Conditional Rendering: Dataset Browser or Results */}
+        {showResults ? (
+          results && (
+            <div className="w-full max-w-4xl">
+              <h3 className="text-white font-semibold mb-4 text-center">
+                Comparison Results
+              </h3>
+              <ImageComparisonResults results={results} />
+            </div>
+          )
+        ) : (
+          <DatasetBrowser />
         )}
       </div>
     </div>
