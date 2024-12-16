@@ -7,8 +7,8 @@ from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.responses import JSONResponse
 import shutil
 from pydantic import BaseModel
-from music_information.final_audio import compare_file_with_database
-from music_information.final_audio import clear_cache
+# from music_information.final_audio import compare_file_with_database
+# from music_information.final_audio import clear_cache
 from fastapi.middleware.cors import CORSMiddleware
 import os, json, zipfile, rarfile
 from fastapi.staticfiles import StaticFiles
@@ -138,12 +138,13 @@ async def upload_image(file: UploadFile = File(...)):
     """
     Mengunggah file gambar dan menyimpannya di folder dataset.
     """
+    print("Uploading image...")
     try:
-        dataset_folder = os.path.join(os.getcwd(), "image_dataset")
-        os.makedirs(dataset_folder, exist_ok=True)
+        file_location = f"../public/dataset/test_image/{file.filename}"
+        os.makedirs(os.path.dirname(file_location), exist_ok=True)
+        print(f"File path: {file.filename}")
 
-        file_path = os.path.join(dataset_folder, file.filename)
-        with open(file_path, "wb") as buffer:
+        with open(file_location, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
 
         return {"message": f"File {file.filename} berhasil diunggah ke dataset."}
@@ -160,15 +161,23 @@ async def compare_image(request: CompareImageRequest):
     Membandingkan gambar yang diunggah dengan dataset yang ada.
     """
     start_time = time.time()
+    print("Comparing image...TIME STARTED")
     uploaded_image_name = request.features
-    dataset_folder = os.path.join(os.getcwd(), "image_dataset")
+    
+    # Gunakan path yang konsisten dengan upload_image
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    dataset_folder = os.path.abspath(os.path.join(current_dir, "..", "..", "source", "public", "dataset","test_image"))
     dataset_path = os.path.join(dataset_folder, uploaded_image_name)
+    
+    logging.info(f"Current Directory: {current_dir}")
+    logging.info(f"Dataset Folder: {dataset_folder}")
+    logging.info(f"Dataset Path: {dataset_path}")
 
     # Validasi keberadaan file di folder dataset
     if not os.path.exists(dataset_path):
         logging.error(f"Gambar {uploaded_image_name} tidak ditemukan di dataset.")
         raise HTTPException(status_code=404, detail=f"Gambar {uploaded_image_name} tidak ditemukan di dataset.")
-    
+
     try:
         # Pastikan path yang digunakan valid dan sesuai
         logging.info(f"Membandingkan gambar {uploaded_image_name} dengan dataset...")

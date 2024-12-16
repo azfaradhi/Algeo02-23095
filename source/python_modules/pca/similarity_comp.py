@@ -20,7 +20,7 @@ def euclidean_distance_batch(query_vector, dataset_vectors):
 
 def get_image_path(directory, index):
     files = os.listdir(directory)
-    image_files = [file for file in files if file.endswith('.jpg') or file.endswith('.png')]
+    image_files = [file for file in files if file.endswith('.jpg') or file.endswith('.png') or file.endswith('.jpeg')]
     if index < 0 or index >= len(image_files):
         return None
     filename = image_files[index]
