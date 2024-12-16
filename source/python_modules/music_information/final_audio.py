@@ -99,4 +99,4 @@ def compare_file_with_database(uploadedName):
     # compare
     result = sim.compare_features_with_database(features, list)
     end = time.time()
-    return {"album": result, "time": end-start, "len": lenlist}
+    return {"album": result, "time": end-start, "len": lenlist, "result": len(result)}

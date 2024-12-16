@@ -8,7 +8,7 @@ import { fetchMapperData, fetchFilesFromDataset } from 'src/services/api';
 
 const AudioSubmit = () => {
     const [audioFile, setAudioFile] = useState<File | null>(null);
-    const [result, setResult] = useState<ResultData>({ album: [], time: 0, len: 0 });
+    const [result, setResult] = useState<ResultData>({ album: [], time: 0, len: 0, result: 0});
     const [isLoading, setIsLoading] = useState(false);
     const [albumData, setAlbumData] = useState<AlbumData[]>([]);
 

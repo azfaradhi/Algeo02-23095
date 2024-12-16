@@ -22,4 +22,5 @@ export type ResultData = {
     album: AlbumResultData[];
     time: number;
     len: number;
+    result: number;
 };

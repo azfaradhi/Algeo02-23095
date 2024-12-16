@@ -56,9 +56,9 @@ def compare_features_with_database(features, database):
         res.append((database[i]['nama'], sim))
     res.sort(key=lambda x: x[1], reverse=True)
 
-    top_5 = res[:5]
-    print([{'namafile': item[0], 'score': item[1]} for item in top_5])
-    return [{'namafile': item[0], 'score': item[1]} for item in top_5]
+    top = [item for item in res if item[1] > 0.7]
+    print([{'namafile': item[0], 'score': item[1]} for item in top])
+    return [{'namafile': item[0], 'score': item[1]} for item in top]
     
 # # na1 = "alb_esp1.mid"
 # # window1 = audio_processing.midi_processing(na1)
