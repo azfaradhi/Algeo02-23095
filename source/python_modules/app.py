@@ -12,7 +12,7 @@ from music_information.final_audio import clear_cache
 from fastapi.middleware.cors import CORSMiddleware
 import os, json, zipfile, rarfile
 from fastapi.staticfiles import StaticFiles
-from pca.final_image import compare_image_with_dataset
+from pca.final_image import compare_image_with_dataset, clear_image_cache
 from fastapi import Body
 from pydantic import BaseModel
 from fastapi.staticfiles import StaticFiles
@@ -220,12 +220,26 @@ async def get_dataset_images():
     image_files = [f for f in os.listdir(dataset_path) if f.endswith(('.png', '.jpg', '.jpeg'))]
     return [{"filename": filename} for filename in image_files]
 
-@app.get("/delete_dataset")
+@app.delete("/delete_dataset")
 async def delete_dataset():
     try:
-        shutil.rmtree("../public/dataset/test_audio")
-        shutil.rmtree("../public/dataset/test_image")
+        audio_path = os.path.join(UPLOAD_DIR, "test_audio")
+        image_path = os.path.join(UPLOAD_DIR, "test_image")
+        mapper_path = os.path.join(UPLOAD_DIR, "mapper.json")
+        
+        if os.path.exists(audio_path):
+            shutil.rmtree(audio_path)
+        if os.path.exists(image_path):
+            shutil.rmtree(image_path)
+        if os.path.exists(mapper_path):
+            os.remove(mapper_path)
+            
+        os.makedirs(audio_path, exist_ok=True)
+        os.makedirs(image_path, exist_ok=True)
+        
         clear_cache()
+        clear_image_cache()
+
         return {"message": "Dataset berhasil dihapus."}
     except Exception as e:
         return JSONResponse(content={"message": str(e)}, status_code=500)
