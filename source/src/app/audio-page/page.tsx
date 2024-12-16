@@ -5,7 +5,7 @@ import Header from "src/components/header";
 import AudioSubmit from "src/components/audio/audioSubmit";
 import "../../styles/global.css"
 import AudioCard from "src/components/audio/audioCard";
-import { fetchMapperData } from '../../services/api';
+import { fetchFilesFromDataset, fetchMapperData } from '../../services/api';
 
 type AlbumData = {
   audio: string;
@@ -26,6 +26,12 @@ export default function AudioPage() {
         setAlbumData(data);
       } catch (error) {
         console.error('Error fetching album data:', error);
+        try {
+          const fallbackData = await fetchFilesFromDataset();
+          setAlbumData(fallbackData);
+        } catch (fallbackError) {
+          console.error('Error fetching fallback album data:', fallbackError);
+        }
       }
     };
 

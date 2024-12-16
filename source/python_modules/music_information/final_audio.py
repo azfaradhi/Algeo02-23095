@@ -9,7 +9,10 @@ def compare_file_with_database(uploadedName):
     for filename in os.listdir(database):
         file = os.path.join(database,filename)
         try:
-            temp = audio.midi_processing(file)
+            if uploadedName.endswith('.mid'):
+                temp = audio.midi_processing(file)
+            elif uploadedName.endswith('.wav'):
+                temp = audio.wav_processing(file)
             temp2 = extract.extract_feature(temp)
             list.append({'nama': filename, 'features': temp2})
         except Exception as e:
