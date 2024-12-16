@@ -7,8 +7,8 @@ from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.responses import JSONResponse
 import shutil
 from pydantic import BaseModel
-from music_information.final_audio import compare_file_with_database
-from music_information.final_audio import clear_cache
+# from music_information.final_audio import compare_file_with_database
+# from music_information.final_audio import clear_cache
 from fastapi.middleware.cors import CORSMiddleware
 import os, json, zipfile, rarfile
 from fastapi.staticfiles import StaticFiles
@@ -211,3 +211,9 @@ async def compare_image(request: CompareImageRequest):
         # Log error secara rinci
         logging.error(f"Error dalam /compare/image/: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Kesalahan saat membandingkan gambar: {e}")
+
+@app.get("/dataset/images/")
+async def get_dataset_images():
+    dataset_path = "../public/dataset/test_image"
+    image_files = [f for f in os.listdir(dataset_path) if f.endswith(('.png', '.jpg', '.jpeg'))]
+    return [{"filename": filename} for filename in image_files]
