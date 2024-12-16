@@ -118,7 +118,7 @@ async def save_file(file: UploadFile, subdir: str):
 
 async def save_zipfile(file: UploadFile, subdir: str):
     try:
-        temp_file_location = os.path.join(UPLOAD_DIR, file.filename)
+        temp_file_location = os.path.join(UPLOAD_DIR,file.filename)
         with open(temp_file_location, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
 
