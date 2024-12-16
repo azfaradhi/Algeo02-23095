@@ -179,6 +179,12 @@ const RecordingPage = () => {
                                         <AudioPlayCard album={matchAlbum} score={item.score} />
                                     </div>
                                 )}
+                                {!matchAlbum && (
+                                    <div className="mt-4 flex w-full justify-between">
+                                      <h2 className="text-xl">{item.namafile}</h2>
+                                      <h2 className="text-xl">{(item.score * 100 ).toFixed(2)}%</h2>
+                                    </div>
+                                )}
                             </li>
                         );
                     })}
