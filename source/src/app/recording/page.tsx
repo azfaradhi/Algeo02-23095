@@ -1,7 +1,8 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import "../../styles/global.css";
-import { ResultData } from "src/components/audio/types";
+import { ResultData, AlbumData } from "src/components/audio/types";
+import AudioPlayCard from "src/components/audio/audioPlayCard";
 
 const RecordingPage = () => {
   const [isRecording, setIsRecording] = useState(false);
@@ -152,6 +153,11 @@ const RecordingPage = () => {
           const errorData = await compareResponse.text();
           throw new Error(`HTTP error! status: ${compareResponse.status}, message: ${errorData}`);
         }
+    
+        const dataRecord: ResultData = await responseRecord.json();
+        console.log("Response data:", dataRecord);
+        setResult(dataRecord);
+
 
         const compareData: ResultData = await compareResponse.json();
         console.log("Comparison data:", compareData);
@@ -197,28 +203,54 @@ const RecordingPage = () => {
 
   return (
     <div className="flex flex-col items-center w-full px-5">
-      <div className="flex flex-col w-full gap-5 justify-center py-4 items-center border border-white rounded-xl">
-        <h1 className="text-3xl font-bold mb-6">Recording Page</h1>
-        <button
-          onClick={isRecording ? () => stopRecording() : startRecording}
-          className={`px-6 py-2 rounded-lg font-semibold text-white ${
-            isRecording ? "bg-red-500 hover:bg-red-600" : "bg-green-500 hover:bg-green-600"
-          }`}
-        >
-          {isRecording ? "Stop Recording" : "Start Recording"}
-        </button>
-        {audioURL && (
-          <div className="mt-6 flex flex-col items-center">
-            <audio src={audioURL} controls autoPlay className="mb-4" />
-          </div>
-        )}
-        {isLoading && <p>Processing...</p>}
-        {result.len > 0 && (
-          <div className="mt-4 text-center">
-            <p>Processed {result.len} data in {result.time} seconds</p>
-          </div>
-        )}
-      </div>
+    <div className="flex flex-col w-full gap-5 justify-center py-4 items-center border border-white rounded-xl">
+      <h1 className="text-3xl font-bold mb-6">Recording Page</h1>
+      {result.len > 0 && (
+              <div className='w-full px-5'>
+                <h1 className='text-3xl pt-5'>Memproses {result.len} data dalam waktu {result.time.toFixed(2)} detik</h1>
+                  <ul>
+                    {result.album.map((item, index) => {
+                        const matchAlbum = albumData.find((album) => album.audio === item.namafile);
+                        return (
+                            <li key={index}>
+                                {matchAlbum && (
+                                    <div className="mt-4">
+                                        <AudioPlayCard album={matchAlbum} score={item.score} />
+                                    </div>
+                                )}
+                                {!matchAlbum && (
+                                    <div className="mt-4 flex w-full justify-between">
+                                      <h2 className="text-xl text-center">{item.namafile}</h2>
+                                      <h2 className="text-xl">{(item.score * 100 ).toFixed(2)}%</h2>
+                                    </div>
+                                )}
+                            </li>
+                        );
+                    })}
+                  </ul>
+                </div>
+            )}
+      <button
+        onClick={isRecording ? stopRecording : startRecording}
+        className={`px-6 py-2 rounded-lg font-semibold text-white ${
+          isRecording ? "bg-red-500 hover:bg-red-600" : "bg-green-500 hover:bg-green-600"
+        }`}
+      >
+        {isRecording ? "Stop Recording" : "Start Recording"}
+      </button>
+      {audioURL && (
+        <div className="mt-6 flex flex-col items-center">
+          <audio src={audioURL} controls className="mb-4" />
+          <button
+            onClick={downloadRecording}
+            className="px-6 py-2 rounded-lg font-semibold text-white bg-blue-500 hover:bg-blue-600"
+          >
+            Upload Recording
+          </button>
+        </div>
+      )}
+    </div>
+
     </div>
   );
 };
