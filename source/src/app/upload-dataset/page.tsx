@@ -8,6 +8,7 @@ export default function UploadPage() {
   const [audioFile, setAudioFile] = useState<File | null>(null);
   const [mapperFile, setMapperFile] = useState<File | null>(null);
 
+
   const handleFileUpload = async (file: File, endpoint: string) => {
     const formData = new FormData();
     formData.append("file", file);
@@ -29,6 +30,22 @@ export default function UploadPage() {
     }
   };
 
+  const handleSubmit = async () => {
+    try {
+        if (imageFile) {
+            await handleFileUpload(imageFile, "http://localhost:8000/upload_image");
+        }
+        if (audioFile) {
+            await handleFileUpload(audioFile, "http://localhost:8000/upload_audio");
+        }
+        if (mapperFile) {
+            await handleFileUpload(mapperFile, "http://localhost:8000/upload_mapper");
+        }
+    } catch (error) {
+        console.error("Error uploading file:", error);
+    }
+  };
+
   return (
     <div className="h-screen bg-cover bg-fixed bg-center" style={{ backgroundImage: "url('background.png')" }}>
         <div className="py-5">
@@ -44,7 +61,6 @@ export default function UploadPage() {
             onChange={(e) => {
               if (e.target.files && e.target.files.length > 0) {
                 setImageFile(e.target.files[0]);
-                handleFileUpload(e.target.files[0], "http://localhost:8000/upload_image");
               }
             }}
           />
@@ -57,7 +73,6 @@ export default function UploadPage() {
             onChange={(e) => {
               if (e.target.files && e.target.files.length > 0) {
                 setAudioFile(e.target.files[0]);
-                handleFileUpload(e.target.files[0], "http://localhost:8000/upload_audio");
               }
             }}
           />
@@ -70,11 +85,16 @@ export default function UploadPage() {
             onChange={(e) => {
               if (e.target.files && e.target.files.length > 0) {
                 setMapperFile(e.target.files[0]);
-                handleFileUpload(e.target.files[0], "http://localhost:8000/upload_mapper");
               }
             }}
           />
         </div>
+        <button
+            onClick={handleSubmit}
+            className="bg-black text-white rounded-xl p-2 w-1/4"
+        >
+            Submit
+        </button>
       </div>
     </div>
   );
