@@ -11,7 +11,8 @@ cache_dir = Path("cache")
 cache_dir.mkdir(exist_ok=True)
 
 # inisialisasi cache
-_cache_file = cache_dir / "test_midi_dataset"
+_cache_file = cache_dir / "test_audio"
+
 _database_cache = None
 
 def clear_cache():
@@ -24,7 +25,7 @@ def clear_cache():
 def process_database():
     """Process all files in database and return the features list"""
     list = []
-    database = "../public/dataset/test_midi_dataset"
+    database = "../public/dataset/test_audio"
     
     for root, dirs, files in os.walk(database):
         for filename in files:

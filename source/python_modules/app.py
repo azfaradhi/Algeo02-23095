@@ -7,8 +7,8 @@ from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.responses import JSONResponse
 import shutil
 from pydantic import BaseModel
-# from music_information.final_audio import compare_file_with_database
-# from music_information.final_audio import clear_cache
+from music_information.final_audio import compare_file_with_database
+from music_information.final_audio import clear_cache
 from fastapi.middleware.cors import CORSMiddleware
 import os, json, zipfile, rarfile
 from fastapi.staticfiles import StaticFiles
@@ -22,7 +22,6 @@ from fastapi.staticfiles import StaticFiles
 app = FastAPI()
 UPLOAD_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'public/dataset')
 # Mounting the folder where images are stored so they can be accessed via HTTP
-app.mount("/image_dataset", StaticFiles(directory="image_dataset"), name="image_dataset")
 
 app.add_middleware(
     CORSMiddleware,
@@ -81,7 +80,7 @@ async def get_mapper():
 @app.get("/dataset")
 async def get_files():
     try:
-        files = os.listdir(os.path.join(UPLOAD_DIR, 'test_midi_dataset'))
+        files = os.listdir(os.path.join(UPLOAD_DIR, 'test_audio'))
         album_data = [{'audio': file, 'image': 'No Image', 'songName': file, 'artist': 'unknown'} for file in files]
         return JSONResponse(content=album_data)
     except Exception as e:
@@ -93,9 +92,10 @@ async def upload_image(file: UploadFile = File(...)):
 
 @app.post("/upload_audio")
 async def upload_audio(file: UploadFile = File(...)):
-    if file.filename.endswith('.mid'):
-        return await save_file(file, "test_midi_dataset")
-    return await save_zipfile(file, "test_midi_dataset")
+    if file.filename.endswith('.mid') or file.filename.endswith('.wav'):
+        return await save_file(file, "test_audio")
+    print("Efwefs")
+    return await save_zipfile(file, "test_audio")
 
 @app.post("/upload_mapper")
 async def upload_mapper(file: UploadFile = File(...)):
