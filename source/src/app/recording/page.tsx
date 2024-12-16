@@ -1,12 +1,14 @@
 "use client";
 import React, { useState, useRef } from "react";
 import "../../styles/global.css";
-import { ResultData } from "src/components/audio/types";
+import { ResultData, AlbumData } from "src/components/audio/types";
+import AudioPlayCard from "src/components/audio/audioPlayCard";
 
 const RecordingPage = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [audioURL, setAudioURL] = useState("");
-  const [result, setResult] = useState<ResultData[]> ([]);
+  const [result, setResult] = useState<ResultData>({ album: [], time: 0, len: 0, result: 0});
+  const [albumData, setAlbumData] = useState<AlbumData[]>([]);
   
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
@@ -145,7 +147,7 @@ const RecordingPage = () => {
             throw new Error(`HTTP error! status: ${responseRecord.status}, message: ${errorData}`);
         }
     
-        const dataRecord: ResultData[] = await responseRecord.json();
+        const dataRecord: ResultData = await responseRecord.json();
         console.log("Response data:", dataRecord);
         setResult(dataRecord);
 
@@ -164,6 +166,25 @@ const RecordingPage = () => {
     <div className="flex flex-col items-center w-full px-5">
     <div className="flex flex-col w-full gap-5 justify-center py-4 items-center border border-white rounded-xl">
       <h1 className="text-3xl font-bold mb-6">Recording Page</h1>
+      {result.len > 0 && (
+              <div className='w-full px-5'>
+                <h1 className='text-3xl pt-5'>Memproses {result.len} data dalam waktu {result.time.toFixed(2)} detik</h1>
+                  <ul>
+                    {result.album.map((item, index) => {
+                        const matchAlbum = albumData.find((album) => album.audio === item.namafile);
+                        return (
+                            <li key={index}>
+                                {matchAlbum && (
+                                    <div className="mt-4">
+                                        <AudioPlayCard album={matchAlbum} score={item.score} />
+                                    </div>
+                                )}
+                            </li>
+                        );
+                    })}
+                  </ul>
+                </div>
+            )}
       <button
         onClick={isRecording ? stopRecording : startRecording}
         className={`px-6 py-2 rounded-lg font-semibold text-white ${
