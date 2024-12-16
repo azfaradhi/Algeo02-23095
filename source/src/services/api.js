@@ -13,3 +13,8 @@ export const fetchMapperData = async () => {
   const response = await api.get('/mapper');
   return response.data;
 };
+
+export const fetchFilesFromDataset = async () => {
+  const response = await api.get('/dataset');
+  return response.data;
+}

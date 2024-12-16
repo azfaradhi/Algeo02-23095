@@ -78,6 +78,15 @@ async def get_mapper():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to read mapper.json: {str(e)}")
 
+@app.get("/dataset")
+async def get_files():
+    try:
+        files = os.listdir(os.path.join(UPLOAD_DIR, 'test_midi_dataset'))
+        album_data = [{'audio': file, 'image': 'No Image', 'songName': file, 'artist': 'unknown'} for file in files]
+        return JSONResponse(content=album_data)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to read dataset: {str(e)}")
+
 @app.post("/upload_image")
 async def upload_image(file: UploadFile = File(...)):
     return await save_zipfile(file, "image")
