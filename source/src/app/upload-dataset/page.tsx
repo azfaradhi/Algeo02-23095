@@ -31,6 +31,23 @@ export default function UploadPage() {
         }
     };
 
+    const deleteDataset = async () => {
+        try {
+            const response = await fetch("http://localhost:8000/delete_dataset", {
+                method: "DELETE",
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to delete dataset files");
+            }
+
+            const data = await response.json();
+            console.log("Dataset files deleted successfully:", data);
+        } catch (error) {
+            console.error("Error deleting dataset files:", error);
+        }
+    };
+
   const handleSubmit = async () => {
     console.log(audioFiles);
     try {
@@ -100,6 +117,12 @@ export default function UploadPage() {
             className="bg-black text-white rounded-xl p-2 w-1/4"
         >
             Submit
+        </button>
+        <button
+            onClick={deleteDataset}
+            className="bg-red-600 text-white rounded-xl p-2 w-1/4"
+        >
+            Delete Dataset Files
         </button>
       </div>
     </div>

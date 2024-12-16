@@ -109,6 +109,7 @@ async def save_file(file: UploadFile, subdir: str):
         
         with open(file_path, "wb") as f:
             f.write(await file.read())
+        clear_cache()
         return JSONResponse(content={"message": "File uploaded successfully", "filename": file.filename})
     except Exception as e:
         return JSONResponse(content={"message": str(e)}, status_code=500)
@@ -217,3 +218,13 @@ async def get_dataset_images():
     dataset_path = "../public/dataset/test_image"
     image_files = [f for f in os.listdir(dataset_path) if f.endswith(('.png', '.jpg', '.jpeg'))]
     return [{"filename": filename} for filename in image_files]
+
+@app.get("/delete_dataset")
+async def delete_dataset():
+    try:
+        shutil.rmtree("../public/dataset/test_audio")
+        shutil.rmtree("../public/dataset/test_image")
+        clear_cache()
+        return {"message": "Dataset berhasil dihapus."}
+    except Exception as e:
+        return JSONResponse(content={"message": str(e)}, status_code=500)
