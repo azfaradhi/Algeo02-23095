@@ -88,7 +88,7 @@ const DatasetBrowser: React.FC = () => {
 
       {/* Pagination Controls */}
       {totalPages > 1 && (
-        <div className="flex justify-center items-center space-x-4 mt-4">
+        <div className="flex justify-center items-center space-x-4 mt-4 mb-3">
           <button 
             onClick={prevPage} 
             disabled={currentPage === 1}

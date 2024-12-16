@@ -58,7 +58,7 @@ export default function AudioPage() {
       </div>
       <div className="flex w-full  mx-2 justify-center pb-10">
         {/* handle submit and show match album */}
-        <div className="w-5/12 text-center"> 
+        <div className="w-5/12 text-center mt-12"> 
           <div className="mb-4">
             <AudioSubmit/>  
           </div>
